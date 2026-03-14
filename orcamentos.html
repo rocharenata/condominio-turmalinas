@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Orçamentos - Turmalinas</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <header>
+        📋 Orçamentos e Indicações
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Morador</th>
+                        <th>Apto</th>
+                        <th>Serviço</th>
+                        <th>Contato</th>
+                        <th>Rede Social</th>
+                    </tr>
+                </thead>
+                <tbody id="listaOrcamentos">
+                    <tr><td colspan="5">A carregar orçamentos...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <h3>Indicar Serviço</h3>
+            <form id="formOrcamento">
+                <input type="text" id="morador" placeholder="Teu Nome" required>
+                <input type="number" id="apto" placeholder="Teu Apartamento" required>
+                <input type="text" id="servico" placeholder="Empresa / Serviço Sugerido" required>
+                <input type="text" id="contato" placeholder="Telefone / WhatsApp">
+                <input type="text" id="rede_social" placeholder="Instagram ou Link">
+                
+                <button type="submit" class="submit">Adicionar Indicação</button>
+            </form>
+        </div>
+
+        <a class="link" href="index.html">← Voltar para Moradores</a>
+    </div>
+
+   <script>
+    const _supabaseUrl = 'https://fmluskuoyzgnzbxsllum.supabase.co';
+    const _supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtbHVza3VveXpnbnpieHNsbHVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1MDI4MzEsImV4cCI6MjA4OTA3ODgzMX0.uGzuqE4y3_wkZNPJmNFnSSUnjDcEJaeuJjGBsT0z1UQ';
+    
+    // IMPORTANTE: Definir como variável global
+    window.supabase = supabase.createClient(_supabaseUrl, _supabaseKey);
+</script>
+<script src="script_orcamentos.js"></script>
+</body>
+</html>
