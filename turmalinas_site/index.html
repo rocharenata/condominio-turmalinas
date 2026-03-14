@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moradores Turmalinas</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+    <header>
+        💎 Moradores Turmalinas
+    </header>
+
+    <div class="container">
+
+        <div class="torres">
+            <button onclick="carregarTorre(1)">Torre 1</button>
+            <button onclick="carregarTorre(2)">Torre 2</button>
+            <button onclick="carregarTorre(3)">Torre 3</button>
+        </div>
+
+        <div class="card">
+            <h2 id="tituloTorre">Selecione uma torre</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Apartamento</th>
+                        <th>Moradores</th>
+                    </tr>
+                </thead>
+                <tbody id="listaMoradores">
+                    <tr>
+                        <td colspan="2">Selecione uma torre para carregar os dados...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <h3>Cadastrar Morador</h3>
+            <form id="formMorador">
+                <input type="number" id="apto" placeholder="Apartamento" required>
+                <input type="text" id="morador" placeholder="Nome do morador" required>
+                <button type="submit" class="submit">Cadastrar</button>
+            </form>
+        </div>
+
+        <a class="link" href="orcamentos.html">📋 Ver Orçamentos</a>
+
+    </div>
+
+<script>
+        const _supabaseUrl = 'https://fmluskuoyzgnzbxsllum.supabase.co';
+        const _supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtbHVza3VveXpnbnpieHNsbHVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1MDI4MzEsImV4cCI6MjA4OTA3ODgzMX0.uGzuqE4y3_wkZNPJmNFnSSUnjDcEJaeuJjGBsT0z1UQ';
+        
+        // Usamos um nome único para a variável global
+        window.supabaseClient = supabase.createClient(_supabaseUrl, _supabaseKey);
+    </script>
+
+    <script src="script.js"></script>
+
+<script src="script.js"></script>
+
+</body>
+</html>
