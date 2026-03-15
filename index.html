@@ -1,70 +1,179 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moradores Turmalinas</title>
-    <link rel="stylesheet" href="style.css">
-    
+    <title>Moradores - Condomínio Turmalinas</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-</head>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; margin: 0; }
+        .hidden { display: none !important; }
+        
+        /* TELA DE LOGIN */
+        .login-screen { display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .login-card { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; max-width: 350px; }
+        .btn-google { background-color: #4285F4; color: white; border: none; padding: 15px 30px; border-radius: 10px; font-size: 16px; cursor: pointer; font-weight: bold; width: 100%; }
 
+        /* PAINEL PRINCIPAL */
+        #conteudo-privado { padding: 20px; max-width: 1000px; margin: 0 auto; display: none; }
+        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; background: linear-gradient(135deg, #22a6b3 0%, #1b8a94 100%); padding: 20px 30px; border-radius: 15px; color: white; box-shadow: 0 10px 20px rgba(34, 166, 179, 0.2); }
+        
+        .cadastro-section { background: white; padding: 25px; border-radius: 15px; margin-bottom: 30px; border-top: 5px solid #22a6b3; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .form-row { display: flex; gap: 15px; flex-wrap: wrap; }
+        input { flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 10px; outline: none; }
+        .btn-cadastrar { background: #22a6b3; color: white; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer; font-weight: bold; }
+
+        .navigation-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab-button { flex: 1; padding: 12px; border: none; border-radius: 10px; background: white; cursor: pointer; font-weight: bold; color: #7f8c8d; }
+        .tab-button.active { background: #22a6b3; color: white; }
+
+        .content-section { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; }
+        th { padding: 18px 15px; text-align: left; color: white; background: #22a6b3; text-transform: uppercase; }
+        td { padding: 18px 15px; border-bottom: 1px solid #f1f1f1; color: #2c3e50; }
+    </style>
+</head>
 <body>
 
-    <header>
-        💎 Moradores Turmalinas
-    </header>
+    <div id="loading" style="text-align: center; margin-top: 100px; font-size: 20px; color: #22a6b3; font-weight: bold;">
+        💎 Validando acesso Turmalinas...
+    </div>
 
-    <div class="container">
+    <div id="tela-login" class="login-screen" style="display: none;">
+        <div class="login-card">
+            <div style="font-size: 60px;">💎</div>
+            <h1>Turmalinas</h1>
+            <p>Acesse o sistema de gestão</p><br>
+            <button class="btn-google" onclick="loginGoogle()">Entrar com Google</button>
+        </div>
+    </div>
 
-        <div class="torres">
-            <button onclick="carregarTorre(1)">Torre 1</button>
-            <button onclick="carregarTorre(2)">Torre 2</button>
-            <button onclick="carregarTorre(3)">Torre 3</button>
+    <div id="conteudo-privado">
+        <div class="header-top">
+            <div style="display:flex; align-items:center; gap:15px;">
+                <div style="font-size: 40px;">💎</div>
+                <div>
+                    <h1 style="margin:0; font-size:22px;">TURMALINAS</h1>
+                    <p id="user-email-display" style="margin:0; font-size:14px; opacity:0.8;"></p>
+                </div>
+            </div>
+            <button onclick="logout()" style="background:none; border:1px solid white; color:white; cursor:pointer; padding:8px 15px; border-radius:50px; font-weight:bold;">Sair</button>
         </div>
 
-        <div class="card">
-            <h2 id="tituloTorre">Selecione uma torre</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Apartamento</th>
-                        <th>Moradores</th>
-                    </tr>
-                </thead>
-                <tbody id="listaMoradores">
-                    <tr>
-                        <td colspan="2">Selecione uma torre para carregar os dados...</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="card">
-            <h3>Cadastrar Morador</h3>
-            <form id="formMorador">
-                <input type="number" id="apto" placeholder="Apartamento" required>
-                <input type="text" id="morador" placeholder="Nome do morador" required>
-                <button type="submit" class="submit">Cadastrar</button>
+        <div class="cadastro-section">
+            <h3 style="margin-top:0">➕ Novo Morador</h3>
+            <form id="formMorador" class="form-row">
+                <input type="number" id="apto" placeholder="Apto" required style="max-width: 100px;">
+                <input type="text" id="morador" placeholder="Nome do Morador" required>
+                <button type="submit" class="btn-cadastrar">Salvar</button>
             </form>
         </div>
 
-        <a class="link" href="orcamentos.html">📋 Ver Orçamentos</a>
+        <div class="navigation-tabs">
+            <button id="btn-t1" class="tab-button active" onclick="carregarTorre(1)">Torre 1</button>
+            <button id="btn-t2" class="tab-button" onclick="carregarTorre(2)">Torre 2</button>
+            <button id="btn-t3" class="tab-button" onclick="carregarTorre(3)">Torre 3</button>
+        </div>
 
+        <div class="content-section">
+            <h2 id="tituloTorre">Torre 1</h2>
+            <table>
+                <thead>
+                    <tr><th>Apartamento</th><th>Morador</th></tr>
+                </thead>
+                <tbody id="listaMoradores"></tbody>
+            </table>
+        </div>
     </div>
 
-<script>
+    <script>
         const _supabaseUrl = 'https://fmluskuoyzgnzbxsllum.supabase.co';
-        const _supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtbHVza3VveXpnbnpieHNsbHVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1MDI4MzEsImV4cCI6MjA4OTA3ODgzMX0.uGzuqE4y3_wkZNPJmNFnSSUnjDcEJaeuJjGBsT0z1UQ';
-        
-        // Usamos um nome único para a variável global
-        window.supabaseClient = supabase.createClient(_supabaseUrl, _supabaseKey);
+        const _supabaseKey = 'sb_publishable_HkaCJSZoX-0CcP7Vr8teyA_ia7VMm3xS_82HqE6_HkaCJSZoX';
+        const db = supabase.createClient(_supabaseUrl, _supabaseKey);
+
+        let torreAtual = 1;
+
+        // Função para alternar telas
+        function alternarTelas(logado, user = null) {
+            document.getElementById('loading').style.display = 'none';
+            if (logado) {
+                document.getElementById('tela-login').style.display = 'none';
+                document.getElementById('conteudo-privado').style.display = 'block';
+                document.getElementById('user-email-display').innerText = user.email;
+                // Limpa o hash da URL sem recarregar
+                if (window.location.hash) window.history.replaceState({}, "", window.location.pathname);
+                carregarTorre(1);
+            } else {
+                document.getElementById('tela-login').style.display = 'flex';
+                document.getElementById('conteudo-privado').style.display = 'none';
+            }
+        }
+
+        // Monitor de Autenticação - CORREÇÃO DO ERRO 401
+        db.auth.onAuthStateChange((event, session) => {
+            console.log("Evento Supabase:", event);
+            if (session) {
+                alternarTelas(true, session.user);
+            } else {
+                // Se não há sessão ativa, mas há um access_token na URL, 
+                // esperamos um pouco para o Supabase processar antes de mostrar login
+                if (!window.location.hash.includes('access_token')) {
+                    alternarTelas(false);
+                }
+            }
+        });
+
+        // AJUSTE NO LOGIN (Onde o 401 morre)
+        async function loginGoogle() {
+            // Define exatamente para onde voltar
+            const urlRetorno = window.location.origin + window.location.pathname;
+            
+            await db.auth.signInWithOAuth({
+                provider: 'google',
+                options: { 
+                    redirectTo: urlRetorno,
+                    queryParams: {
+                        prompt: 'select_account' // Força escolher a conta para renovar o token
+                    }
+                }
+            });
+        }
+
+        async function logout() {
+            await db.auth.signOut();
+            window.location.reload();
+        }
+
+        async function carregarTorre(numero) {
+            torreAtual = numero;
+            document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+            document.getElementById(`btn-t${numero}`).classList.add('active');
+            document.getElementById("tituloTorre").innerText = "Torre " + numero;
+
+            const lista = document.getElementById("listaMoradores");
+            lista.innerHTML = "<tr><td colspan='2'>Buscando dados...</td></tr>";
+
+            const { data, error } = await db.from('moradores').select('*')
+                .or(`Torre.eq.Torre ${numero},Torre.eq.${numero}`)
+                .order('Apartamento', { ascending: true });
+
+            if (error) {
+                lista.innerHTML = `<tr><td colspan='2' style='color:red'>Erro de acesso no banco.</td></tr>`;
+                return;
+            }
+            lista.innerHTML = data.map(m => `<tr><td style="font-weight:bold; color:#22a6b3;">${m.Apartamento}</td><td>${m.Moradores}</td></tr>`).join('') || "<tr><td colspan='2'>Vazio.</td></tr>";
+        }
+
+        document.getElementById("formMorador").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const { error } = await db.from('moradores').insert([{
+                Torre: "Torre " + torreAtual,
+                Apartamento: parseInt(document.getElementById("apto").value),
+                Moradores: document.getElementById("morador").value
+            }]);
+            if (error) alert("Erro: " + error.message);
+            else { e.target.reset(); carregarTorre(torreAtual); }
+        });
     </script>
-
-    <script src="script.js"></script>
-
-<script src="script.js"></script>
-
 </body>
 </html>

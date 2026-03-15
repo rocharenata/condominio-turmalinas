@@ -1,138 +1,158 @@
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Segoe UI',sans-serif;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-body{
-background:#f4fbfc;
-color:#1e293b;
+body {
+    background: #f4f7f6; /* Um tom de cinza mais moderno */
+    color: #1e293b;
 }
 
-/* HEADER */
-
-header{
-background:#19a7b8;
-color:white;
-padding:18px;
-font-size:22px;
-font-weight:bold;
-display:flex;
-align-items:center;
-gap:10px;
-box-shadow:0 3px 10px rgba(0,0,0,0.1);
+/* HEADER COM DEGRADÊ E DIAMANTE */
+header {
+    background: linear-gradient(135deg, #22a6b3 0%, #1b8a94 100%);
+    color: white;
+    padding: 20px 30px;
+    font-size: 24px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 10px 20px rgba(34, 166, 179, 0.2);
+    border-radius: 0 0 15px 15px; /* Arredondado leve embaixo */
 }
 
 /* CONTAINER */
-
-.container{
-max-width:1000px;
-margin:auto;
-padding:30px;
+.container {
+    max-width: 1000px;
+    margin: auto;
+    padding: 20px;
 }
 
-/* BOTÕES TORRE */
-
-.torres{
-display:flex;
-gap:15px;
-margin-bottom:25px;
+/* BOTÕES TORRE (ESTILO ABAS) */
+.torres {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 25px;
 }
 
-.torres button{
-flex:1;
-padding:12px;
-border:none;
-border-radius:10px;
-background:#19a7b8;
-color:white;
-font-weight:600;
-cursor:pointer;
-transition:0.3s;
+.torres button {
+    flex: 1;
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    background: white; /* Botão inativo fica branco */
+    color: #7f8c8d;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
 }
 
-.torres button:hover{
-background:#138496;
-transform:scale(1.03);
+/* Classe para o botão ativo que você pode usar via JS */
+.torres button.active, .torres button:hover {
+    background: #22a6b3;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(34, 166, 179, 0.3);
 }
 
-/* CARDS */
-
-.card{
-background:white;
-border-radius:12px;
-padding:25px;
-margin-bottom:25px;
-box-shadow:0 5px 20px rgba(0,0,0,0.08);
+/* CARDS E FORMULÁRIO */
+.card {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    border-top: 5px solid #22a6b3; /* Detalhe azul no topo do card */
 }
 
-/* TABELA */
-
-table{
-width:100%;
-border-collapse:collapse;
-margin-top:15px;
+/* TABELA MELHORADA */
+table {
+    width: 100%;
+    border-collapse: separate; 
+    border-spacing: 0; 
+    margin-top: 15px;
 }
 
-th{
-background:#19a7b8;
-color:white;
-padding:12px;
-text-align:left;
+th {
+    background: #22a6b3;
+    color: #ffffff !important; /* Branco puro forçado */
+    padding: 18px 15px; /* Mais espaço interno */
+    text-align: left;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 800;
 }
 
-td{
-padding:12px;
-border-bottom:1px solid #e5e7eb;
+/* Arredondar cantos da tabela */
+th:first-child { border-radius: 10px 0 0 0; }
+th:last-child { border-radius: 0 10px 0 0; }
+
+td {
+    padding: 18px 15px;
+    border-bottom: 1px solid #f1f1f1;
+    font-size: 16px;
+    color: #334155;
 }
 
-tr:hover{
-background:#f4fbfc;
+tr:last-child td:first-child { border-radius: 0 0 0 10px; }
+tr:last-child td:last-child { border-radius: 0 0 10px 0; }
+
+tr:hover td {
+    background: #f8fdfd;
 }
 
-/* FORM */
-
-form{
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-margin-top:15px;
+/* INPUTS */
+input {
+    padding: 12px 15px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    flex: 1;
+    outline: none;
+    transition: 0.3s;
 }
 
-input{
-padding:10px;
-border-radius:8px;
-border:1px solid #d1d5db;
-flex:1;
+input:focus {
+    border-color: #22a6b3;
+    box-shadow: 0 0 0 3px rgba(34, 166, 179, 0.1);
 }
 
-/* BOTÃO */
-
-button.submit{
-background:#19a7b8;
-color:white;
-border:none;
-padding:10px 18px;
-border-radius:8px;
-cursor:pointer;
-font-weight:600;
+/* BOTÃO SUBMIT */
+button.submit {
+    background: #22a6b3;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
 }
 
-button.submit:hover{
-background:#138496;
+button.submit:hover {
+    background: #1b8a94;
+    transform: scale(1.02);
 }
 
 /* LINKS */
-
-.link{
-display:inline-block;
-margin-top:20px;
-color:#19a7b8;
-font-weight:600;
-text-decoration:none;
+.link {
+    display: inline-block;
+    margin-top: 20px;
+    color: #22a6b3;
+    font-weight: bold;
+    text-decoration: none;
+    background: white;
+    padding: 10px 20px;
+    border-radius: 50px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: 0.3s;
 }
 
-.link:hover{
-text-decoration:underline;
+.link:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
 }

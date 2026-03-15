@@ -2,56 +2,223 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Orçamentos - Turmalinas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orçamentos - Condomínio Turmalinas</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; }
+        #conteudo-privado { display: none; padding: 20px; max-width: 1000px; margin: 0 auto; }
+        
+        /* HEADER ESTILIZADO */
+        .header-top { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 30px; 
+            background: linear-gradient(135deg, #22a6b3 0%, #1b8a94 100%); 
+            padding: 20px 30px; 
+            border-radius: 15px; 
+            box-shadow: 0 10px 20px rgba(34, 166, 179, 0.2);
+            color: white;
+        }
+        .logo-area { display: flex; align-items: center; gap: 15px; }
+        .logo-diamond { font-size: 40px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.5)); }
+        .header-info h1 { margin: 0; font-size: 22px; letter-spacing: 1px; }
+        .header-info p { margin: 0; font-size: 14px; opacity: 0.9; }
+        
+        .btn-voltar { 
+            text-decoration: none; 
+            color: #22a6b3; 
+            background: white; 
+            padding: 10px 20px; 
+            border-radius: 50px; 
+            font-weight: bold; 
+            font-size: 14px;
+            transition: 0.3s;
+        }
+        .btn-voltar:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+
+        /* FORMULÁRIO NO TOPO */
+        .cadastro-section { 
+            margin-bottom: 30px; 
+            background: white; 
+            padding: 25px; 
+            border-radius: 15px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+            border-top: 5px solid #22a6b3; 
+        }
+        .cadastro-section h3 { margin-top: 0; color: #333; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        
+        .input-row { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 15px; }
+        input { 
+            flex: 1; 
+            min-width: 150px; 
+            padding: 12px 15px; 
+            border: 1px solid #e0e0e0; 
+            border-radius: 10px; 
+            font-size: 14px; 
+            outline: none;
+            transition: border 0.3s;
+        }
+        input:focus { border-color: #22a6b3; }
+        
+        .btn-adicionar { 
+            background: #22a6b3; 
+            color: white; 
+            border: none; 
+            padding: 12px 30px; 
+            border-radius: 10px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            width: 100%;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        .btn-adicionar:hover { background: #1b8a94; }
+
+        /* TABELA */
+        .content-section { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .content-section h2 { margin-top: 0; color: #2c3e50; font-size: 20px; margin-bottom: 20px; }
+        
+        table { width: 100%; border-collapse: collapse; }
+        thead { background: #f8f9fa; }
+        th { padding: 15px; text-align: left; color: #7f8c8d; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #eee; }
+        td { padding: 15px; border-bottom: 1px solid #f1f1f1; color: #34495e; font-size: 15px; }
+        .badge-servico { background: #e8f6f7; color: #22a6b3; padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 13px; }
+    </style>
 </head>
 <body>
-    <header>
-        📋 Orçamentos e Indicações
-    </header>
 
-    <div class="container">
-        <div class="card">
+    <div id="conteudo-privado">
+        <div class="header-top">
+            <div class="logo-area">
+                <div class="logo-diamond">💎</div>
+                <div class="header-info">
+                    <h1>TURMALINAS</h1>
+                    <p>Orçamentos e Indicações</p>
+                </div>
+            </div>
+            <a href="index.html" class="btn-voltar">← Voltar para Moradores</a>
+        </div>
+
+        <div class="cadastro-section">
+            <h3><span>➕</span> Indicar Novo Serviço</h3>
+            <form id="formOrcamento">
+                <div class="input-row">
+                    <input type="text" id="morador_nome" placeholder="Seu Nome" required>
+                    <input type="number" id="apto" placeholder="Seu Apto" required style="max-width: 120px;">
+                    <input type="text" id="servico" placeholder="Empresa / Serviço Sugerido" required>
+                </div>
+                <div class="input-row">
+                    <input type="text" id="contato" placeholder="Telefone ou WhatsApp" required>
+                    <input type="text" id="rede_social" placeholder="Instagram ou Link (opcional)">
+                </div>
+                <button type="submit" class="btn-adicionar">Adicionar Indicação na Lista</button>
+            </form>
+        </div>
+
+        <div class="content-section">
+            <h2>Indicações da Comunidade</h2>
             <table>
                 <thead>
                     <tr>
                         <th>Morador</th>
-                        <th>Apto</th>
-                        <th>Serviço</th>
+                        <th>Serviço / Empresa</th>
                         <th>Contato</th>
                         <th>Rede Social</th>
                     </tr>
                 </thead>
                 <tbody id="listaOrcamentos">
-                    <tr><td colspan="5">A carregar orçamentos...</td></tr>
-                </tbody>
+                    </tbody>
             </table>
         </div>
-
-        <div class="card">
-            <h3>Indicar Serviço</h3>
-            <form id="formOrcamento">
-                <input type="text" id="morador" placeholder="Teu Nome" required>
-                <input type="number" id="apto" placeholder="Teu Apartamento" required>
-                <input type="text" id="servico" placeholder="Empresa / Serviço Sugerido" required>
-                <input type="text" id="contato" placeholder="Telefone / WhatsApp">
-                <input type="text" id="rede_social" placeholder="Instagram ou Link">
-                
-                <button type="submit" class="submit">Adicionar Indicação</button>
-            </form>
-        </div>
-
-        <a class="link" href="index.html">← Voltar para Moradores</a>
     </div>
 
-   <script>
-    const _supabaseUrl = 'https://fmluskuoyzgnzbxsllum.supabase.co';
-    const _supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtbHVza3VveXpnbnpieHNsbHVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1MDI4MzEsImV4cCI6MjA4OTA3ODgzMX0.uGzuqE4y3_wkZNPJmNFnSSUnjDcEJaeuJjGBsT0z1UQ';
-    
-    // IMPORTANTE: Definir como variável global
-    window.supabase = supabase.createClient(_supabaseUrl, _supabaseKey);
-</script>
-<script src="script_orcamentos.js"></script>
+    <script>
+        const _supabaseUrl = 'https://fmluskuoyzgnzbxsllum.supabase.co';
+        const _supabaseKey = 'sb_publishable_HkaCJSZoX-0CcP7Vr8teyA_ia7VMm3xS_82HqE6_HkaCJSZoX';
+        const db = supabase.createClient(_supabaseUrl, _supabaseKey);
+
+        // MODO TESTE (false para produção/GitHub)
+        const loginRealAtivo = true; 
+
+        async function checarSessao() {
+            if (!loginRealAtivo) {
+                document.getElementById('conteudo-privado').style.display = 'block';
+                carregarOrcamentos();
+                return;
+            }
+            const { data: { user } } = await db.auth.getUser();
+            if (user) {
+                document.getElementById('conteudo-privado').style.display = 'block';
+                carregarOrcamentos();
+            } else {
+                window.location.href = 'index.html';
+            }
+        }
+
+        async function carregarOrcamentos() {
+            const listaCorpo = document.getElementById("listaOrcamentos");
+            listaCorpo.innerHTML = "<tr><td colspan='4'>Carregando...</td></tr>";
+
+            try {
+                const { data, error } = await db
+                    .from('orcamentos')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                let html = "";
+                if (data && data.length > 0) {
+                    data.forEach(o => {
+                        const link = o.rede_social ? `<a href="${o.rede_social}" target="_blank" style="color:#22a6b3; font-weight:bold;">Ver Link</a>` : '---';
+                        html += `<tr>
+                            <td><strong>${o.morador_nome}</strong><br><small style="color:#95a5a6">Apto ${o.apto}</small></td>
+                            <td><span class="badge-servico">${o.servico}</span></td>
+                            <td>${o.contato}</td>
+                            <td>${link}</td>
+                        </tr>`;
+                    });
+                } else {
+                    html = "<tr><td colspan='4' style='text-align:center; padding: 40px;'>Nenhuma indicação encontrada. Seja o primeiro!</td></tr>";
+                }
+                listaCorpo.innerHTML = html;
+            } catch (err) {
+                listaCorpo.innerHTML = `<tr><td colspan='4' style='color:red'>Erro ao carregar dados.</td></tr>`;
+            }
+        }
+
+        document.getElementById("formOrcamento").addEventListener("submit", async function(e) {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            btn.innerText = "Salvando...";
+            btn.disabled = true;
+
+            const payload = {
+                morador_nome: document.getElementById("morador_nome").value,
+                apto: parseInt(document.getElementById("apto").value),
+                servico: document.getElementById("servico").value,
+                contato: document.getElementById("contato").value,
+                rede_social: document.getElementById("rede_social").value
+            };
+
+            const { error } = await db.from('orcamentos').insert([payload]);
+
+            if (error) {
+                alert("Erro ao salvar: " + error.message);
+                btn.disabled = false;
+                btn.innerText = "Adicionar Indicação na Lista";
+            } else {
+                this.reset();
+                btn.disabled = false;
+                btn.innerText = "Adicionar Indicação na Lista";
+                carregarOrcamentos();
+            }
+        });
+
+        checarSessao();
+    </script>
 </body>
 </html>
