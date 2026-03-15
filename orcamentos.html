@@ -2,56 +2,206 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Orçamentos - Turmalinas</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turmalinas - Orçamentos</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; margin: 0; }
+        .container { display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 0 20px 20px 20px; }
+        
+        /* CABEÇALHO MODERNO COM ABAS */
+        .header-container { 
+            background: linear-gradient(135deg, #22a6b3 0%, #1b8a94 100%); 
+            width: 100%;
+            padding: 30px 0 0 0; 
+            border-radius: 0 0 30px 30px; 
+            box-shadow: 0 10px 30px rgba(27, 138, 148, 0.3); 
+            margin-bottom: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .header-content {
+            width: 95%;
+            max-width: 1100px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            padding-bottom: 25px;
+        }
+        .nav-tabs {
+            width: 95%;
+            max-width: 1100px;
+            display: flex;
+            gap: 10px;
+        }
+        .nav-tab {
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 15px 15px 0 0;
+            font-weight: bold;
+            font-size: 15px;
+            transition: 0.3s;
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+        .nav-tab:hover { background: rgba(255,255,255,0.2); }
+        .nav-tab.active { background: white; color: #1b8a94; }
+
+        /* CONTEÚDO */
+        #app { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: center; width: 95%; max-width: 1200px; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { background: #f8fafc; color: #64748b; padding: 12px; text-align: left; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; }
+        td { padding: 15px 12px; border-bottom: 1px solid #eee; text-align: left; font-size: 14px; color: #333; }
+        tr:hover { background: #fcfdfe; }
+
+        .form-box { background: #f9f9f9; padding: 25px; border-radius: 15px; margin-bottom: 30px; display: grid; grid-template-columns: 2fr 1fr 2fr; gap: 12px; text-align: left; border: 1px solid #edf2f7; }
+        input { padding: 12px; border: 1px solid #ddd; border-radius: 10px; outline: none; transition: 0.3s; }
+        input:focus { border-color: #22a6b3; box-shadow: 0 0 0 3px rgba(34, 166, 179, 0.1); }
+        
+        .btn-salvar { grid-column: span 3; background: #22a6b3; color: white; border: none; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.3s; margin-top: 5px; }
+        .btn-salvar:hover { background: #1b8a94; transform: translateY(-1px); }
+
+        .btn-whatsapp { 
+            display: inline-flex; align-items: center; background-color: #25d366; color: white; 
+            text-decoration: none; padding: 7px 15px; border-radius: 20px; font-weight: bold; font-size: 12px; transition: 0.3s;
+        }
+        .btn-whatsapp:hover { background-color: #128c7e; transform: scale(1.05); }
+        
+        .insta-link { color: #e1306c; text-decoration: none; font-weight: bold; font-size: 13px; }
+        .badge-apto { background: #e0f2f1; color: #00796b; padding: 3px 10px; border-radius: 6px; font-weight: bold; font-size: 12px; }
+
+        /* RODAPÉ DISCRETO */
+        footer { width: 100%; margin-top: 50px; padding: 40px 20px; text-align: center; color: #64748b; font-size: 14px; background: #f8fafc; border-top: 1px solid #e2e8f0; }
+    </style>
 </head>
 <body>
-    <header>
-        📋 Orçamentos e Indicações
-    </header>
+
+    <div class="header-container">
+        <div class="header-content">
+            <div>
+                <h1 style="margin: 0; font-size: 22px; letter-spacing: 1px;">💎 CONDOMÍNIO TURMALINAS</h1>
+                <p style="margin: 5px 0 0 0; opacity: 0.8; font-size: 13px;">Painel de Gestão Administrativa</p>
+            </div>
+            <div style="font-size: 28px;">💰</div>
+        </div>
+        <div class="nav-tabs">
+            <a href="index.html" class="nav-tab">👥 Moradores</a>
+            <a href="orcamentos.html" class="nav-tab active">💰 Orçamentos</a>
+        </div>
+    </div>
 
     <div class="container">
-        <div class="card">
+        <div id="app">
+            <div style="text-align: left; margin-bottom: 25px; border-left: 4px solid #22a6b3; padding-left: 15px;">
+                <h2 style="margin:0; color: #1b8a94; font-size: 18px;">Indicações de Serviços</h2>
+                <small style="color: #64748b;">Recomendações compartilhadas pelos vizinhos</small>
+            </div>
+
+            <div class="form-box">
+                <input type="text" id="morador" placeholder="Nome de quem indica">
+                <input type="number" id="apto" placeholder="Apto">
+                <input type="text" id="servico" placeholder="Serviço (ex: Pintura)">
+                <input type="text" id="empresa" placeholder="Empresa / Profissional">
+                <input type="text" id="contato" placeholder="WhatsApp (com DDD)">
+                <input type="text" id="rede_social" placeholder="Instagram (@exemplo)">
+                <button class="btn-salvar" onclick="salvarIndicao()">Adicionar Indicação na Lista</button>
+            </div>
+
             <table>
                 <thead>
                     <tr>
-                        <th>Morador</th>
+                        <th>Indicado por</th>
                         <th>Apto</th>
-                        <th>Serviço</th>
+                        <th>Serviço / Empresa</th>
                         <th>Contato</th>
                         <th>Rede Social</th>
                     </tr>
                 </thead>
                 <tbody id="listaOrcamentos">
-                    <tr><td colspan="5">A carregar orçamentos...</td></tr>
+                    <tr><td colspan="5">Sincronizando banco de dados...</td></tr>
                 </tbody>
             </table>
         </div>
-
-        <div class="card">
-            <h3>Indicar Serviço</h3>
-            <form id="formOrcamento">
-                <input type="text" id="morador" placeholder="Teu Nome" required>
-                <input type="number" id="apto" placeholder="Teu Apartamento" required>
-                <input type="text" id="servico" placeholder="Empresa / Serviço Sugerido" required>
-                <input type="text" id="contato" placeholder="Telefone / WhatsApp">
-                <input type="text" id="rede_social" placeholder="Instagram ou Link">
-                
-                <button type="submit" class="submit">Adicionar Indicação</button>
-            </form>
-        </div>
-
-        <a class="link" href="index.html">← Voltar para Moradores</a>
     </div>
 
-   <script>
-    const _supabaseUrl = 'https://fmluskuoyzgnzbxsllum.supabase.co';
-    const _supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtbHVza3VveXpnbnpieHNsbHVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1MDI4MzEsImV4cCI6MjA4OTA3ODgzMX0.uGzuqE4y3_wkZNPJmNFnSSUnjDcEJaeuJjGBsT0z1UQ';
-    
-    // IMPORTANTE: Definir como variável global
-    window.supabase = supabase.createClient(_supabaseUrl, _supabaseKey);
-</script>
-<script src="script_orcamentos.js"></script>
+    <script>
+        const _supabaseUrl = 'https://fmluskuoyzgnzbxsllum.supabase.co';
+        const _supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtbHVza3VveXpnbnpieHNsbHVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1MDI4MzEsImV4cCI6MjA4OTA3ODgzMX0.uGzuqE4y3_wkZNPJmNFnSSUnjDcEJaeuJjGBsT0z1UQ';
+        const db = supabase.createClient(_supabaseUrl, _supabaseKey);
+
+        async function carregarDados() {
+            const { data, error } = await db.from('orcamentos').select('*').order('id', { ascending: false });
+            const tbody = document.getElementById('listaOrcamentos');
+            
+            if (error) {
+                tbody.innerHTML = `<tr><td colspan="5" style="color:red">Erro: ${error.message}</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = data.map(o => {
+                const foneLimpo = o.contato ? o.contato.replace(/\D/g, '') : '';
+                const linkWhats = foneLimpo ? `https://wa.me/55${foneLimpo}?text=Olá,%20vi%20sua%20indicação%20no%20site%20Turmalinas!` : null;
+                const rede = o.rede_social ? `<a href="https://instagram.com/${o.rede_social.replace('@','')}" target="_blank" class="insta-link">📸 ${o.rede_social}</a>` : '---';
+                
+                return `
+                <tr>
+                    <td>${o.morador || '---'}</td>
+                    <td><span class="badge-apto">${o.apto || '---'}</span></td>
+                    <td><strong>${o.servico || '---'}</strong><br><small style="color:#666">${o.empresa || ''}</small></td>
+                    <td>${linkWhats ? `<a href="${linkWhats}" target="_blank" class="btn-whatsapp">🟢 WhatsApp</a>` : '---'}</td>
+                    <td>${rede}</td>
+                </tr>`;
+            }).join('') || "<tr><td colspan='5'>Nenhuma indicação encontrada.</td></tr>";
+        }
+
+        async function salvarIndicao() {
+            const payload = {
+                morador: document.getElementById('morador').value,
+                apto: document.getElementById('apto').value,
+                servico: document.getElementById('servico').value,
+                empresa: document.getElementById('empresa').value,
+                contato: document.getElementById('contato').value,
+                rede_social: document.getElementById('rede_social').value
+            };
+
+            const { error } = await db.from('orcamentos').insert([payload]);
+            if (error) alert("Erro ao salvar: " + error.message);
+            else {
+                document.querySelectorAll('input').forEach(i => i.value = '');
+                carregarDados();
+            }
+        }
+
+        carregarDados();
+    </script>
+
+    <footer>
+        <p style="margin-bottom: 20px; letter-spacing: 0.5px;">
+            Desenvolvido com ❤️ por <strong style="color: #1b8a94;">Renata Rocha</strong>
+        </p>
+        
+        <div style="display: flex; justify-content: center; gap: 15px; align-items: center; margin-bottom: 20px;">
+            <a href="mailto:renatarocha95@hotmail.com" 
+               title="Enviar E-mail"
+               style="display: flex; align-items: center; gap: 8px; color: #1b8a94; text-decoration: none; border: 1px solid #1b8a94; padding: 6px 18px; border-radius: 20px; transition: 0.3s; font-size: 13px; font-weight: 500;">
+               <span>✉️</span> Contato via E-mail
+            </a>
+
+            <a href="https://wa.me/5511978283472" 
+               target="_blank" 
+               title="Chamar no WhatsApp"
+               style="display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; background: #eceff1; border-radius: 50%; text-decoration: none; transition: 0.3s; filter: grayscale(1);">
+               <span style="font-size: 16px;">💬</span>
+            </a>
+        </div>
+
+        <p style="font-size: 11px; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px;">
+            © 2026 Condomínio Turmalinas
+        </p>
+    </footer>
+
 </body>
 </html>
