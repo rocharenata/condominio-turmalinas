@@ -10,7 +10,7 @@
         body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; margin: 0; }
         .container { display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 0 10px 20px 10px; }
         
-        /* CABEÇALHO */
+        /* HEADER */
         .header-container { 
             background: linear-gradient(135deg, #22a6b3 0%, #1b8a94 100%); 
             width: 100%; padding: 30px 0 0 0; border-radius: 0 0 30px 30px; 
@@ -30,8 +30,8 @@
         .input-group { display: flex; flex-direction: column; }
         .input-group label { font-size: 12px; font-weight: bold; color: #64748b; margin-bottom: 5px; }
         input, select { padding: 12px; border: 1px solid #ddd; border-radius: 10px; outline: none; font-size: 14px; width: 100%; box-sizing: border-box; }
-        input:focus { border-color: #22a6b3; }
-        .btn-salvar { grid-column: 1 / -1; background: #22a6b3; color: white; border: none; padding: 16px; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.3s; margin-top: 5px; }
+        
+        .btn-salvar { grid-column: 1 / -1; background: #22a6b3; color: white; border: none; padding: 16px; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.3s; }
         .btn-salvar:hover { background: #1b8a94; }
 
         /* TABELA */
@@ -39,64 +39,49 @@
         th { background: #22a6b3; color: white; padding: 12px; text-align: left; font-size: 13px; text-transform: uppercase; }
         td { padding: 15px 12px; border-bottom: 1px solid #eee; text-align: left; font-size: 14px; color: #333; }
         
-        /* CHIPS */
+        /* LOCALIZAÇÃO */
         .location-wrapper { display: flex; flex-direction: column; gap: 4px; }
         .chip-torre { background: #0f172a; color: white; padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 800; width: fit-content; text-transform: uppercase; }
         .chip-apto { background: #e0f2f1; color: #00796b; padding: 3px 8px; border-radius: 6px; font-size: 12px; font-weight: bold; width: fit-content; }
 
-        /* BOTÕES SOCIAIS */
+        /* CONTATOS */
         .social-links { display: flex; gap: 12px; }
-        .btn-contact { width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 20px; transition: 0.3s; }
+        .btn-contact { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 20px; transition: 0.3s; }
         .btn-whats { background: #dcfce7; color: #25d366; }
         .btn-whats:hover { background: #25d366; color: white; }
         .btn-insta { background: #fce7f3; color: #e1306c; }
         .btn-insta:hover { background: #e1306c; color: white; }
 
-        /* RESPONSIVIDADE MOBILE */
+        /* RESPONSIVIDADE (MOBILE) - CORREÇÃO DO "ATROPELO" */
         @media (max-width: 768px) {
             thead { display: none; }
             tr { 
-                display: block; 
-                margin-bottom: 20px; 
-                border: 1px solid #edf2f7; 
-                border-radius: 15px; 
-                padding: 15px; 
-                background: #ffffff;
-                box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+                display: block; margin-bottom: 20px; border: 1px solid #edf2f7; 
+                border-radius: 15px; padding: 15px; background: #ffffff; 
+                box-shadow: 0 4px 10px rgba(0,0,0,0.03); 
             }
-            td { 
-                display: flex; 
-                justify-content: space-between; 
-                border: none; 
-                padding: 10px 0; 
-                align-items: center; 
-            }
-            td::before { 
-                content: attr(data-label); 
-                font-weight: bold; 
-                color: #1b8a94; 
-                font-size: 11px;
-                text-transform: uppercase;
-            }
+            td { display: flex; justify-content: space-between; border: none; padding: 10px 0; align-items: center; }
             
-            /* Ajuste específico para o Serviço não ficar espremido */
+            /* Ajuste para o Serviço ocupar linha toda */
             td[data-label="Serviço"] {
-                flex-direction: column;
-                align-items: flex-start;
+                display: block; 
                 background: #f8fafc;
-                margin: 10px -15px; /* Estende até a borda do card */
+                margin: 10px -15px; 
                 padding: 15px;
                 border-top: 1px solid #eee;
                 border-bottom: 1px solid #eee;
             }
-            td[data-label="Serviço"]::before {
-                margin-bottom: 8px;
+            
+            td::before { 
+                content: attr(data-label); font-weight: bold; color: #1b8a94; 
+                font-size: 11px; text-transform: uppercase; 
             }
             
+            .service-content-mobile { margin-top: 8px; display: block; }
             .location-wrapper { align-items: flex-end; }
         }
 
-        footer { width: 100%; margin-top: 50px; padding: 40px 20px; text-align: center; color: #64748b; font-size: 14px; background: #f8fafc; border-top: 1px solid #e2e8f0; }
+        footer { width: 100%; margin-top: 50px; padding: 40px 20px; text-align: center; color: #64748b; font-size: 14px; background: #f8fafc; }
     </style>
 </head>
 <body>
@@ -123,10 +108,7 @@
             </div>
 
             <div class="form-box">
-                <div class="input-group">
-                    <label>Quem indica</label>
-                    <input type="text" id="morador" placeholder="Seu nome">
-                </div>
+                <div class="input-group"><label>Quem indica</label><input type="text" id="morador" placeholder="Seu nome"></div>
                 <div class="input-group">
                     <label>Torre</label>
                     <select id="torre">
@@ -135,30 +117,15 @@
                         <option value="Torre 3">Torre 3</option>
                     </select>
                 </div>
-                <div class="input-group">
-                    <label>Apto</label>
-                    <input type="number" id="apto" placeholder="Nº">
-                </div>
-                <div class="input-group">
-                    <label>Serviço</label>
-                    <input type="text" id="servico" placeholder="Ex: Pintura, Gesso...">
-                </div>
-                <div class="input-group">
-                    <label>Profissional / Empresa</label>
-                    <input type="text" id="empresa" placeholder="Nome do prestador">
-                </div>
-                <div class="input-group">
-                    <label>WhatsApp</label>
-                    <input type="text" id="contato" placeholder="11999999999">
-                </div>
-                <div class="input-group">
-                    <label>Instagram (@perfil)</label>
-                    <input type="text" id="rede_social" placeholder="@perfil">
-                </div>
+                <div class="input-group"><label>Apto</label><input type="number" id="apto" placeholder="Nº"></div>
+                <div class="input-group"><label>Serviço</label><input type="text" id="servico" placeholder="Ex: Pintura, Gesso..."></div>
+                <div class="input-group"><label>Profissional</label><input type="text" id="empresa" placeholder="Nome do prestador"></div>
+                <div class="input-group"><label>WhatsApp</label><input type="text" id="contato" placeholder="11999999999"></div>
+                <div class="input-group"><label>Instagram</label><input type="text" id="rede_social" placeholder="@perfil"></div>
                 <button class="btn-salvar" onclick="salvarIndicao()">Adicionar Indicação</button>
             </div>
 
-            <div class="table-container">
+            <div class="table-container" style="overflow-x: auto;">
                 <table>
                     <thead>
                         <tr>
@@ -169,7 +136,7 @@
                         </tr>
                     </thead>
                     <tbody id="listaOrcamentos">
-                        <tr><td colspan="4" style="text-align:center; padding: 40px; color: #94a3b8;">Carregando indicações...</td></tr>
+                        <tr><td colspan="4" style="text-align:center; padding: 20px;">Carregando...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -184,11 +151,7 @@
         async function carregarDados() {
             const { data, error } = await db.from('orcamentos').select('*').order('created_at', { ascending: false });
             const tbody = document.getElementById('listaOrcamentos');
-            
-            if (error) {
-                tbody.innerHTML = `<tr><td colspan="4" style="padding: 20px; color: red;">Erro ao carregar dados.</td></tr>`;
-                return;
-            }
+            if (error) { tbody.innerHTML = `<tr><td colspan="4">Erro ao carregar dados.</td></tr>`; return; }
 
             tbody.innerHTML = data.map(o => {
                 const foneLimpo = o.contato ? o.contato.replace(/\D/g, '') : '';
@@ -199,7 +162,7 @@
                 <tr>
                     <td data-label="Indicado por">
                         <div style="display: flex; align-items: center; gap: 8px;">
-                            <div style="width: 30px; height: 30px; background: #f1f5f9; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #64748b;"><i class="fas fa-user"></i></div>
+                            <div style="width: 28px; height: 28px; background: #f1f5f9; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #64748b;"><i class="fas fa-user"></i></div>
                             <strong>${o.morador || '---'}</strong>
                         </div>
                     </td>
@@ -210,28 +173,25 @@
                         </div>
                     </td>
                     <td data-label="Serviço">
-                        <span style="color:#1b8a94; font-weight:800; font-size:16px; display:block; letter-spacing: -0.5px;">
-                            ${o.servico || '---'}
-                        </span>
-                        <span style="color:#64748b; font-size:13px; font-weight:500;">
-                            <i class="fas fa-tools" style="font-size:10px; opacity:0.5;"></i> ${o.empresa || 'Profissional'}
-                        </span>
+                        <div class="service-content-mobile">
+                            <span style="color:#1b8a94; font-weight:800; font-size:16px; display:block; line-height:1.2;">${o.servico || '---'}</span>
+                            <small style="color:#64748b; font-weight:600;"><i class="fas fa-tools" style="font-size:10px; opacity:0.5;"></i> ${o.empresa || 'Profissional'}</small>
+                        </div>
                     </td>
                     <td data-label="Contatos">
                         <div class="social-links">
-                            ${linkWhats ? `<a href="${linkWhats}" target="_blank" class="btn-contact btn-whats" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>` : ''}
-                            ${linkInsta ? `<a href="${linkInsta}" target="_blank" class="btn-contact btn-insta" title="Instagram"><i class="fab fa-instagram"></i></a>` : ''}
+                            ${linkWhats ? `<a href="${linkWhats}" target="_blank" class="btn-contact btn-whats"><i class="fab fa-whatsapp"></i></a>` : ''}
+                            ${linkInsta ? `<a href="${linkInsta}" target="_blank" class="btn-contact btn-insta"><i class="fab fa-instagram"></i></a>` : ''}
                         </div>
                     </td>
                 </tr>`;
-            }).join('') || "<tr><td colspan='4' style='text-align:center; padding: 40px;'>Nenhuma indicação cadastrada ainda.</td></tr>";
+            }).join('') || "<tr><td colspan='4' style='text-align:center;'>Nenhuma indicação cadastrada.</td></tr>";
         }
 
         async function salvarIndicao() {
             const btn = document.querySelector('.btn-salvar');
             btn.innerText = "Publicando...";
             btn.disabled = true;
-
             const payload = {
                 morador: document.getElementById('morador').value,
                 torre: document.getElementById('torre').value,
@@ -241,31 +201,15 @@
                 contato: document.getElementById('contato').value,
                 rede_social: document.getElementById('rede_social').value
             };
-
-            if(!payload.servico || !payload.morador) {
-                alert("Por favor, preencha pelo menos o seu nome e o serviço indicado.");
-                btn.innerText = "Adicionar Indicação";
-                btn.disabled = false;
-                return;
-            }
-
             const { error } = await db.from('orcamentos').insert([payload]);
             if (!error) {
                 alert("Indicação publicada com sucesso! 💎");
                 document.querySelectorAll('input').forEach(i => i.value = '');
                 carregarDados();
-            } else {
-                alert("Erro ao salvar: " + error.message);
-            }
-            btn.innerText = "Adicionar Indicação";
-            btn.disabled = false;
+            } else { alert("Erro: " + error.message); }
+            btn.innerText = "Adicionar Indicação"; btn.disabled = false;
         }
         carregarDados();
     </script>
-
-    <footer>
-        <p>Desenvolvido com ❤️ por <strong>Renata Rocha</strong></p>
-        <p style="font-size: 10px; opacity: 0.6; margin-top: 10px;">© 2026 CONDOMÍNIO TURMALINAS</p>
-    </footer>
 </body>
 </html>
