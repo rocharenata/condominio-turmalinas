@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Turmalinas</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .cadastro-box { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; box-sizing: border-box; }
+        .header-blue { background: linear-gradient(135deg, #22a6b3 0%, #1b8a94 100%); color: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; }
+        .form-group { text-align: left; margin-bottom: 12px; }
+        label { display: block; font-size: 12px; color: #64748b; margin-bottom: 5px; font-weight: bold; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; outline: none; box-sizing: border-box; font-size: 14px; }
+        input:focus { border-color: #22a6b3; }
+        .btn-cadastrar { width: 100%; background: #22a6b3; color: white; border: none; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 16px; margin-top: 10px; transition: 0.3s; }
+        .btn-cadastrar:hover { background: #1b8a94; }
+        .footer-link { margin-top: 15px; font-size: 13px; color: #64748b; }
+        .footer-link a { color: #22a6b3; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="cadastro-box">
+        <div class="header-blue">
+            <h2 style="margin:0;">💎 Cadastro</h2>
+            <p style="margin:5px 0 0 0; font-size: 12px;">Crie seu acesso exclusivo</p>
+        </div>
+        <form id="formCadastro">
+            <div class="form-group">
+                <label>Nome Completo</label>
+                <input type="text" id="nome" placeholder="Ex: Renata Rocha" required>
+            </div>
+            <div class="form-group">
+                <label>E-mail (Seu Login)</label>
+                <input type="email" id="email" placeholder="seu@email.com" required>
+            </div>
+            <div class="form-group">
+                <label>Telefone</label>
+                <input type="tel" id="telefone" placeholder="(11) 99999-9999" required>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <div class="form-group" style="flex: 1;">
+                    <label>Torre</label>
+                    <select id="torre">
+                        <option value="1">Torre 1</option>
+                        <option value="2">Torre 2</option>
+                        <option value="3">Torre 3</option>
+                    </select>
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <label>Apto</label>
+                    <input type="number" id="apto" placeholder="Nº" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Crie uma Senha</label>
+                <input type="password" id="senha" placeholder="Mínimo 6 caracteres" required>
+            </div>
+            <button type="submit" class="btn-cadastrar" id="btnAcao">Finalizar Cadastro</button>
+        </form>
+        <div class="footer-link">
+            Já tem conta? <a href="login.html" onclick="localStorage.clear()">Faça login</a>
+        </div>
+    </div>
+
+    <script>
+        const _supabaseUrl = 'https://fmluskuoyzgnzbxsllum.supabase.co';
+        const _supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtbHVza3VveXpnbnpieHNsbHVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1MDI4MzEsImV4cCI6MjA4OTA3ODgzMX0.uGzuqE4y3_wkZNPJmNFnSSUnjDcEJaeuJjGBsT0z1UQ';
+        const db = supabase.createClient(_supabaseUrl, _supabaseKey);
+
+        // Se já estiver logado, não precisa cadastrar, vai direto para o painel
+        if (localStorage.getItem('turmalinas_logado') === 'true') {
+            window.location.replace('index.html');
+        }
+
+        document.getElementById('formCadastro').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btnAcao');
+            
+            const nome = document.getElementById('nome').value;
+            const email = document.getElementById('email').value;
+            const torre = "Torre " + document.getElementById('torre').value;
+            const apto = parseInt(document.getElementById('apto').value);
+            const senha = document.getElementById('senha').value;
+
+            btn.innerText = "Cadastrando...";
+            btn.disabled = true;
+            
+            const payload = {
+                Moradores: nome,
+                email: email,
+                telefone: document.getElementById('telefone').value,
+                Torre: torre,
+                Apartamento: apto,
+                senha: senha 
+            };
+
+            const { error } = await db.from('moradores').insert([payload]);
+
+            if (error) {
+                if (error.code === '23505') {
+                    alert("Atenção: Este e-mail ou apartamento já está cadastrado no sistema.");
+                } else {
+                    alert("Erro ao cadastrar: " + error.message);
+                }
+                btn.innerText = "Finalizar Cadastro";
+                btn.disabled = false;
+            } else {
+                // Login automático após cadastro bem-sucedido
+                localStorage.setItem('turmalinas_logado', 'true');
+                localStorage.setItem('usuario_nome', payload.Moradores);
+                alert("Cadastro realizado com sucesso! Bem-vinda ao Turmalinas.");
+                window.location.replace('index.html'); // Usa replace para não voltar ao formulário no botão 'voltar'
+            }
+        });
+    </script>
+</body>
+</html>

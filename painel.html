@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turmalinas - Painel</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; margin: 0; }
+        .container { display: flex; flex-direction: column; align-items: center; min-height: 80vh; padding: 0 15px 40px 15px; margin: 0 auto; }
+        .header-container { background: linear-gradient(135deg, #22a6b3 0%, #1b8a94 100%); width: 100%; padding: 30px 0 0 0; border-radius: 0 0 30px 30px; box-shadow: 0 10px 30px rgba(27, 138, 148, 0.3); margin-bottom: 30px; display: flex; flex-direction: column; align-items: center; }
+        .header-content { width: 95%; max-width: 1100px; display: flex; justify-content: space-between; align-items: center; color: white; padding-bottom: 25px; }
+        .nav-tabs { width: 95%; max-width: 1100px; display: flex; gap: 8px; justify-content: space-between; align-items: flex-end; }
+        .tabs-links { display: flex; gap: 8px; }
+        .nav-tab { text-decoration: none; padding: 12px 20px; border-radius: 15px 15px 0 0; font-weight: bold; font-size: 14px; transition: 0.3s; background: rgba(255,255,255,0.1); color: white; }
+        .nav-tab.active { background: white; color: #1b8a94; }
+        .btn-logout { background: rgba(255, 255, 255, 0.2); color: white; border: 1px solid rgba(255,255,255,0.4); padding: 8px 15px; border-radius: 10px; cursor: pointer; font-size: 12px; transition: 0.3s; margin-bottom: 10px; }
+        .btn-logout:hover { background: #e74c3c; border-color: #e74c3c; }
+        #app { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 800px; box-sizing: border-box; }
+        .form-box { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 25px; background: #f9f9f9; padding: 20px; border-radius: 15px; border: 1px solid #edf2f7; }
+        input { padding: 12px; border: 1px solid #ddd; border-radius: 10px; outline: none; font-size: 14px; }
+        .btn-salvar { background: #22a6b3; color: white; border: none; padding: 12px; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 15px; transition: 0.3s; }
+        .btn-salvar:hover { background: #1b8a94; }
+        .tabs-torre { display: flex; gap: 5px; margin-bottom: 20px; }
+        .tab-btn { flex: 1; padding: 12px; border: none; border-radius: 10px; cursor: pointer; background: #f1f5f9; font-weight: bold; color: #64748b; font-size: 13px; transition: 0.3s; }
+        .tab-btn.active { background: #22a6b3; color: white; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { background: #22a6b3; color: white; padding: 15px; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; text-align: center; border-radius: 10px 10px 0 0; }
+        td { padding: 15px; border-bottom: 1px solid #eee; text-align: center; color: #333; font-size: 15px; }
+        .badge-apto { background: #e0f2f1; color: #00796b; padding: 6px 14px; border-radius: 8px; font-weight: bold; display: inline-block; }
+    </style>
+</head>
+<body>
+
+    <div class="header-container">
+        <div class="header-content">
+            <div>
+                <h1 style="margin: 0; letter-spacing: 1px;">💎 TURMALINAS</h1>
+                <p id="boasVindas" style="margin: 5px 0 0 0; opacity: 0.8; font-size: 13px;">Gestão de Moradores</p>
+            </div>
+            <button class="btn-logout" onclick="sair()">Sair 🚪</button>
+        </div>
+        <div class="nav-tabs">
+            <div class="tabs-links">
+                <a href="painel.html" class="nav-tab active">👥 Moradores</a>
+                <a href="orcamentos.html" class="nav-tab">💰 Orçamentos</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="app"></div>
+    </div>
+
+    <script>
+        // CORREÇÃO: Redireciona para index.html (que é o seu novo login)
+        if (localStorage.getItem('turmalinas_logado') !== 'true') {
+            window.location.replace('index.html');
+        }
+
+        function sair() {
+            localStorage.clear();
+            window.location.replace('index.html');
+        }
+
+        const nomeUsuario = localStorage.getItem('usuario_nome') || "Morador";
+        document.getElementById('boasVindas').innerText = `Olá, ${nomeUsuario}!`;
+
+        const _supabaseUrl = 'https://fmluskuoyzgnzbxsllum.supabase.co';
+        const _supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtbHVza3VveXpnbnpieHNsbHVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1MDI4MzEsImV4cCI6MjA4OTA3ODgzMX0.uGzuqE4y3_wkZNPJmNFnSSUnjDcEJaeuJjGBsT0z1UQ';
+        const db = supabase.createClient(_supabaseUrl, _supabaseKey);
+
+        const app = document.getElementById('app');
+        let torreAtual = 1;
+
+        function renderPainel() {
+            app.innerHTML = `
+                <div style="text-align: center; margin-bottom: 25px;">
+                    <h2 style="margin:0; color: #1b8a94; font-size: 18px;">Lista de Ocupação</h2>
+                </div>
+                <div class="tabs-torre">
+                    <button class="tab-btn ${torreAtual==1?'active':''}" onclick="mudarTorre(1)">Torre 1</button>
+                    <button class="tab-btn ${torreAtual==2?'active':''}" onclick="mudarTorre(2)">Torre 2</button>
+                    <button class="tab-btn ${torreAtual==3?'active':''}" onclick="mudarTorre(3)">Torre 3</button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 30%;">Apto</th>
+                            <th style="width: 70%;">Morador</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lista"></tbody>
+                </table>
+            `;
+            buscarDados();
+        }
+
+        async function buscarDados() {
+            const tbody = document.getElementById('lista');
+            const { data, error } = await db.from('moradores')
+                .select('*')
+                .or(`Torre.eq.Torre ${torreAtual},Torre.eq.${torreAtual}`)
+                .order('Apartamento', { ascending: true });
+            
+            if (error) return;
+            
+            tbody.innerHTML = data.map(m => `
+                <tr>
+                    <td><span class="badge-apto">${m.Apartamento}</span></td>
+                    <td>${m.Moradores}</td>
+                </tr>
+            `).join('') || "<tr><td colspan='2'>Ninguém cadastrado.</td></tr>";
+        }
+
+        function mudarTorre(n) { torreAtual = n; renderPainel(); }
+        renderPainel();
+    </script>
+</body>
+</html>

@@ -3,147 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Turmalinas - Moradores</title>
+    <title>Login - Turmalinas</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; margin: 0; }
-        
-        .container { 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            min-height: 80vh; 
-            padding: 0 15px 40px 15px; 
-            margin: 0 auto;
-        }
-
-        .header-container { 
-            background: linear-gradient(135deg, #22a6b3 0%, #1b8a94 100%); 
-            width: 100%;
-            padding: 30px 0 0 0; 
-            border-radius: 0 0 30px 30px; 
-            box-shadow: 0 10px 30px rgba(27, 138, 148, 0.3); 
-            margin-bottom: 30px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .header-content {
-            width: 95%;
-            max-width: 1100px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: white;
-            padding-bottom: 25px;
-        }
-        .nav-tabs { width: 95%; max-width: 1100px; display: flex; gap: 8px; }
-        .nav-tab {
-            text-decoration: none; padding: 12px 20px; border-radius: 15px 15px 0 0;
-            font-weight: bold; font-size: 14px; transition: 0.3s;
-            background: rgba(255,255,255,0.1); color: white;
-        }
-        .nav-tab.active { background: white; color: #1b8a94; }
-
-        #app { 
-            background: white; 
-            padding: 30px; 
-            border-radius: 20px; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
-            width: 100%; 
-            max-width: 800px; 
-            box-sizing: border-box;
-        }
-        
-        .form-box { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
-            gap: 12px; 
-            margin-bottom: 25px; 
-            background: #f9f9f9; 
-            padding: 20px; 
-            border-radius: 15px; 
-            border: 1px solid #edf2f7;
-        }
-        input { padding: 12px; border: 1px solid #ddd; border-radius: 10px; outline: none; font-size: 14px; }
-        .btn-salvar { 
-            background: #22a6b3; color: white; border: none; padding: 12px; 
-            border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 15px; transition: 0.3s;
-        }
-        .btn-salvar:hover { background: #1b8a94; }
-
-        .tabs-torre { display: flex; gap: 5px; margin-bottom: 20px; }
-        .tab-btn { flex: 1; padding: 12px; border: none; border-radius: 10px; cursor: pointer; background: #f1f5f9; font-weight: bold; color: #64748b; font-size: 13px; transition: 0.3s; }
-        .tab-btn.active { background: #22a6b3; color: white; }
-
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th { 
-            background: #22a6b3; color: white; padding: 15px; 
-            font-size: 13px; text-transform: uppercase; letter-spacing: 1px;
-            text-align: center; border-radius: 10px 10px 0 0;
-        }
-        td { padding: 15px; border-bottom: 1px solid #eee; text-align: center; color: #333; font-size: 15px; }
-        
-        .badge-apto {
-            background: #e0f2f1; color: #00796b; padding: 6px 14px;
-            border-radius: 8px; font-weight: bold; display: inline-block;
-        }
-
-        @media (max-width: 600px) {
-            .header-content h1 { font-size: 18px; }
-            #app { padding: 20px; }
-            .nav-tab { padding: 10px 12px; font-size: 12px; }
-            thead { display: none; }
-            tr { 
-                display: block; 
-                margin-bottom: 15px; 
-                padding: 15px; 
-                background: #fdfdfd; 
-                border: 1px solid #eee; 
-                border-radius: 15px;
-                box-shadow: 0 2px 5px rgba(0,0,0,0.02);
-            }
-            td { 
-                display: block; 
-                text-align: right; 
-                padding: 10px 0; 
-                border: none; 
-                position: relative; 
-                padding-left: 40%;
-            }
-            td::before { 
-                content: attr(data-label); 
-                position: absolute; 
-                left: 0; 
-                font-weight: bold; 
-                color: #1b8a94; 
-                text-transform: uppercase; 
-                font-size: 12px;
-            }
-            .badge-apto { width: 50px; }
-        }
-
-        footer { width: 100%; margin-top: 50px; padding: 40px 20px; text-align: center; color: #64748b; font-size: 14px; background: #f8fafc; border-top: 1px solid #e2e8f0; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .login-box { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 350px; text-align: center; }
+        .header-blue { background: linear-gradient(135deg, #22a6b3 0%, #1b8a94 100%); color: white; padding: 20px; border-radius: 15px; margin-bottom: 25px; }
+        input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 10px; outline: none; box-sizing: border-box; }
+        .btn-login { width: 100%; background: #22a6b3; color: white; border: none; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.3s; }
+        .btn-login:hover { background: #1b8a94; }
+        .footer-links { margin-top: 20px; font-size: 13px; color: #64748b; }
+        .footer-links a { color: #22a6b3; text-decoration: none; font-weight: bold; }
     </style>
 </head>
 <body>
-
-    <div class="header-container">
-        <div class="header-content">
-            <div>
-                <h1 style="margin: 0; letter-spacing: 1px;">💎 TURMALINAS</h1>
-                <p style="margin: 5px 0 0 0; opacity: 0.8; font-size: 13px;">Gestão de Moradores</p>
-            </div>
-            <div style="font-size: 24px;">🏢</div>
+    <div class="login-box">
+        <div class="header-blue">
+            <h2 style="margin:0;">💎 Login</h2>
+            <p style="margin:5px 0 0 0; font-size: 12px; opacity: 0.9;">Condomínio Turmalinas</p>
         </div>
-        <div class="nav-tabs">
-            <a href="index.html" class="nav-tab active">👥 Moradores</a>
-            <a href="orcamentos.html" class="nav-tab">💰 Orçamentos</a>
+        
+        <input type="email" id="email" placeholder="Seu E-mail (Login)">
+        <input type="password" id="senha" placeholder="Sua Senha">
+        
+        <button class="btn-login" onclick="fazerLogin()" id="btnLogin">Entrar no Painel</button>
+        
+        <div class="footer-links">
+            Ainda não tem acesso? <a href="cadastro.html">Cadastre-se aqui</a>
         </div>
-    </div>
-
-    <div class="container">
-        <div id="app"></div>
     </div>
 
     <script>
@@ -151,100 +38,49 @@
         const _supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtbHVza3VveXpnbnpieHNsbHVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1MDI4MzEsImV4cCI6MjA4OTA3ODgzMX0.uGzuqE4y3_wkZNPJmNFnSSUnjDcEJaeuJjGBsT0z1UQ';
         const db = supabase.createClient(_supabaseUrl, _supabaseKey);
 
-        const app = document.getElementById('app');
-        let torreAtual = 1;
-
-        function renderPainel() {
-            app.innerHTML = `
-                <div style="text-align: center; margin-bottom: 25px;">
-                    <h2 style="margin:0; color: #1b8a94; font-size: 18px;">Lista de Ocupação</h2>
-                    <small style="color: #64748b;">Selecione a torre para visualizar</small>
-                </div>
-
-                <div class="form-box">
-                    <input type="number" id="apto" placeholder="Nº Apto">
-                    <input type="text" id="nome" placeholder="Nome do Morador">
-                    <button class="btn-salvar" onclick="salvarMorador()">Cadastrar</button>
-                </div>
-
-                <div class="tabs-torre">
-                    <button class="tab-btn ${torreAtual==1?'active':''}" onclick="mudarTorre(1)">Torre 1</button>
-                    <button class="tab-btn ${torreAtual==2?'active':''}" onclick="mudarTorre(2)">Torre 2</button>
-                    <button class="tab-btn ${torreAtual==3?'active':''}" onclick="mudarTorre(3)">Torre 3</button>
-                </div>
-
-                <table>
-                    <thead>
-                        <tr>
-                            <th style="width: 30%;">Apto</th>
-                            <th style="width: 70%;">Nome do Morador</th>
-                        </tr>
-                    </thead>
-                    <tbody id="lista">
-                        <tr><td colspan="2">Sincronizando...</td></tr>
-                    </tbody>
-                </table>
-            `;
-            buscarDados();
+        // LOGICA INICIAL: Se já estiver logado, vai direto para o painel
+        if (localStorage.getItem('turmalinas_logado') === 'true') {
+            window.location.replace('painel.html');
         }
 
-        async function buscarDados() {
-            // Limpa a lista visual antes de buscar para evitar mostrar dados antigos excluídos
-            const tbody = document.getElementById('lista');
-            if(tbody) tbody.innerHTML = `<tr><td colspan="2">Buscando dados atualizados...</td></tr>`;
+        async function fazerLogin() {
+            const emailInput = document.getElementById('email').value.trim();
+            const senhaInput = document.getElementById('senha').value;
+            const btn = document.getElementById('btnLogin');
 
-            const { data, error } = await db.from('moradores').select('*')
-                .or(`Torre.eq.Torre ${torreAtual},Torre.eq.${torreAtual}`)
-                .order('Apartamento', { ascending: true });
-            
-            if (error) { 
-                tbody.innerHTML = `<tr><td colspan='2' style='color:red'>Erro ao carregar dados.</td></tr>`; 
-                return; 
+            if (!emailInput || !senhaInput) {
+                alert("Por favor, preencha todos os campos.");
+                return;
             }
-            
-            tbody.innerHTML = data.map(m => `
-                <tr>
-                    <td data-label="Apto"><span class="badge-apto">${m.Apartamento}</span></td>
-                    <td data-label="Morador">${m.Moradores}</td>
-                </tr>
-            `).join('') || "<tr><td colspan='2'>Nenhum morador nesta torre.</td></tr>";
-        }
 
-        async function salvarMorador() {
-            const apto = document.getElementById('apto').value;
-            const nome = document.getElementById('nome').value;
-            if(!apto || !nome) { alert("Preencha todos os campos!"); return; }
+            btn.innerText = "Verificando...";
+            btn.disabled = true;
 
-            const { error } = await db.from('moradores').insert([
-                { Torre: "Torre " + torreAtual, Apartamento: parseInt(apto), Moradores: nome }
-            ]);
+            try {
+                const { data, error } = await db.from('moradores')
+                    .select('*')
+                    .eq('email', emailInput)
+                    .maybeSingle();
 
-            if (error) {
-                // Erro 23505 é o código do PostgreSQL para duplicidade de chave única
-                if (error.code === '23505') {
-                    alert("Atenção: Este apartamento já está cadastrado nesta torre!");
+                if (error) throw error;
+
+                if (!data) {
+                    alert("E-mail não cadastrado!");
+                } else if (senhaInput === data.senha) {
+                    localStorage.setItem('turmalinas_logado', 'true');
+                    localStorage.setItem('usuario_nome', data.Moradores);
+                    window.location.replace('painel.html'); 
                 } else {
-                    alert("Erro ao salvar: " + error.message);
+                    alert("Senha incorreta!");
                 }
-            } else {
-                document.getElementById('apto').value = '';
-                document.getElementById('nome').value = '';
-                buscarDados();
+            } catch (err) {
+                alert("Erro ao conectar: " + err.message);
+            } finally {
+                btn.innerText = "Entrar no Painel";
+                btn.disabled = false;
             }
         }
-
-        function mudarTorre(n) { torreAtual = n; renderPainel(); }
-        renderPainel();
+        document.addEventListener('keypress', (e) => { if (e.key === 'Enter') fazerLogin(); });
     </script>
-
-    <footer>
-        <p>Desenvolvido com ❤️ por <strong>Renata Rocha</strong></p>
-        <div style="margin: 15px 0;">
-            <a href="mailto:renatarocha95@hotmail.com" style="text-decoration:none; color:#1b8a94; border:1px solid #1b8a94; padding:5px 15px; border-radius:20px; font-size:12px;">✉️ E-mail</a>
-            <a href="https://wa.me/5511978283472" target="_blank" style="text-decoration:none; margin-left:10px;">💬</a>
-        </div>
-        <p style="font-size: 10px; opacity: 0.6;">© 2026 CONDOMÍNIO TURMALINAS</p>
-    </footer>
-
 </body>
 </html>
