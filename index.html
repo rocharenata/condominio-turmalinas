@@ -8,15 +8,17 @@
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; margin: 0; }
         
+        /* CENTRALIZAÇÃO E RESPONSIVIDADE */
         .container { 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
             min-height: 80vh; 
-            padding: 0 20px 40px 20px; 
+            padding: 0 15px 40px 15px; 
             margin: 0 auto;
         }
 
+        /* CABEÇALHO */
         .header-container { 
             background: linear-gradient(135deg, #22a6b3 0%, #1b8a94 100%); 
             width: 100%;
@@ -37,60 +39,100 @@
             color: white;
             padding-bottom: 25px;
         }
-        .nav-tabs { width: 95%; max-width: 1100px; display: flex; gap: 10px; }
+        .nav-tabs { width: 95%; max-width: 1100px; display: flex; gap: 8px; }
         .nav-tab {
-            text-decoration: none; padding: 12px 25px; border-radius: 15px 15px 0 0;
-            font-weight: bold; font-size: 15px; transition: 0.3s;
+            text-decoration: none; padding: 12px 20px; border-radius: 15px 15px 0 0;
+            font-weight: bold; font-size: 14px; transition: 0.3s;
             background: rgba(255,255,255,0.1); color: white;
         }
         .nav-tab.active { background: white; color: #1b8a94; }
 
+        /* PAINEL PRINCIPAL */
         #app { 
             background: white; 
-            padding: 40px; 
+            padding: 30px; 
             border-radius: 20px; 
             box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
             width: 100%; 
             max-width: 800px; 
+            box-sizing: border-box;
         }
         
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; table-layout: fixed; }
-        
-        th { 
-            background: #22a6b3; 
-            color: white; 
-            padding: 15px; 
-            font-size: 13px; 
-            text-transform: uppercase; 
-            letter-spacing: 1px;
-            /* CENTRALIZAÇÃO DO TÍTULO */
-            text-align: center; 
+        /* FORMULÁRIO RESPONSIVO */
+        .form-box { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
+            gap: 12px; 
+            margin-bottom: 25px; 
+            background: #f9f9f9; 
+            padding: 20px; 
+            border-radius: 15px; 
+            border: 1px solid #edf2f7;
+        }
+        input { padding: 12px; border: 1px solid #ddd; border-radius: 10px; outline: none; font-size: 14px; }
+        .btn-salvar { 
+            background: #22a6b3; color: white; border: none; padding: 12px; 
+            border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 15px;
         }
 
-        td { 
-            padding: 15px; 
-            border-bottom: 1px solid #eee; 
-            color: #333; 
-            /* CENTRALIZAÇÃO DOS NOMES */
-            text-align: center; 
-            word-wrap: break-word;
+        /* TABS DE TORRE */
+        .tabs-torre { display: flex; gap: 5px; margin-bottom: 20px; }
+        .tab-btn { flex: 1; padding: 12px; border: none; border-radius: 10px; cursor: pointer; background: #f1f5f9; font-weight: bold; color: #64748b; font-size: 13px; transition: 0.3s; }
+        .tab-btn.active { background: #22a6b3; color: white; }
+
+        /* TABELA E CARDS RESPONSIVOS */
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { 
+            background: #22a6b3; color: white; padding: 15px; 
+            font-size: 13px; text-transform: uppercase; letter-spacing: 1px;
+            text-align: center; border-radius: 10px 10px 0 0;
         }
+        td { padding: 15px; border-bottom: 1px solid #eee; text-align: center; color: #333; font-size: 15px; }
         
         .badge-apto {
-            background: #e0f2f1;
-            color: #00796b;
-            padding: 5px 12px;
-            border-radius: 8px;
-            font-weight: bold;
-            display: inline-block;
+            background: #e0f2f1; color: #00796b; padding: 6px 14px;
+            border-radius: 8px; font-weight: bold; display: inline-block;
         }
 
-        .form-box { display: flex; gap: 10px; margin-bottom: 20px; background: #f9f9f9; padding: 15px; border-radius: 10px; }
-        input { padding: 12px; border: 1px solid #ddd; border-radius: 8px; flex: 1; outline: none; }
-        .tabs-torre { display: flex; gap: 5px; margin-bottom: 15px; }
-        .tab-btn { flex: 1; padding: 10px; border: none; border-radius: 8px; cursor: pointer; background: #f1f5f9; font-weight: bold; color: #64748b; }
-        .tab-btn.active { background: #22a6b3; color: white; }
-        .btn-salvar { background:#22a6b3; color:white; border:none; padding:10px 20px; border-radius:8px; cursor:pointer; font-weight: bold; }
+        /* REGRAS PARA TELEMÓVEL (MOBILE) */
+        @media (max-width: 600px) {
+            .header-content h1 { font-size: 18px; }
+            #app { padding: 20px; }
+            .nav-tab { padding: 10px 12px; font-size: 12px; }
+            
+            thead { display: none; } /* Esconde o topo da tabela */
+            
+            tr { 
+                display: block; 
+                margin-bottom: 15px; 
+                padding: 15px; 
+                background: #fdfdfd; 
+                border: 1px solid #eee; 
+                border-radius: 15px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            }
+            
+            td { 
+                display: block; 
+                text-align: right; 
+                padding: 10px 0; 
+                border: none; 
+                position: relative; 
+                padding-left: 40%;
+            }
+
+            td::before { 
+                content: attr(data-label); 
+                position: absolute; 
+                left: 0; 
+                font-weight: bold; 
+                color: #1b8a94; 
+                text-transform: uppercase; 
+                font-size: 12px;
+            }
+
+            .badge-apto { width: 50px; }
+        }
 
         footer { width: 100%; margin-top: 50px; padding: 40px 20px; text-align: center; color: #64748b; font-size: 14px; background: #f8fafc; border-top: 1px solid #e2e8f0; }
     </style>
@@ -100,10 +142,10 @@
     <div class="header-container">
         <div class="header-content">
             <div>
-                <h1 style="margin: 0; font-size: 22px; letter-spacing: 1px;">💎 CONDOMÍNIO TURMALINAS</h1>
+                <h1 style="margin: 0; letter-spacing: 1px;">💎 TURMALINAS</h1>
                 <p style="margin: 5px 0 0 0; opacity: 0.8; font-size: 13px;">Gestão de Moradores</p>
             </div>
-            <div style="font-size: 28px;">🏢</div>
+            <div style="font-size: 24px;">🏢</div>
         </div>
         <div class="nav-tabs">
             <a href="index.html" class="nav-tab active">👥 Moradores</a>
@@ -126,8 +168,8 @@
         function renderPainel() {
             app.innerHTML = `
                 <div style="text-align: center; margin-bottom: 25px;">
-                    <h2 style="margin:0; color: #1b8a94; font-size: 18px;">Lista de Moradores</h2>
-                    <small style="color: #64748b;">Torre selecionada para visualização</small>
+                    <h2 style="margin:0; color: #1b8a94; font-size: 18px;">Lista de Ocupação</h2>
+                    <small style="color: #64748b;">Selecione a torre para visualizar</small>
                 </div>
 
                 <div class="form-box">
@@ -170,8 +212,8 @@
             
             tbody.innerHTML = data.map(m => `
                 <tr>
-                    <td><span class="badge-apto">${m.Apartamento}</span></td>
-                    <td>${m.Moradores}</td>
+                    <td data-label="Apto"><span class="badge-apto">${m.Apartamento}</span></td>
+                    <td data-label="Morador">${m.Moradores}</td>
                 </tr>
             `).join('') || "<tr><td colspan='2'>Nenhum morador nesta torre.</td></tr>";
         }
@@ -198,18 +240,8 @@
     </script>
 
     <footer>
-        <p style="margin-bottom: 20px; letter-spacing: 0.5px;">
-            Desenvolvido com ❤️ por <strong style="color: #1b8a94;">Renata Rocha</strong>
-        </p>
-        <div style="display: flex; justify-content: center; gap: 15px; align-items: center; margin-bottom: 20px;">
-            <a href="mailto:renatarocha95@hotmail.com" style="color: #1b8a94; text-decoration: none; border: 1px solid #1b8a94; padding: 6px 18px; border-radius: 20px; font-size: 13px;">
-               <span>✉️</span> Contato via E-mail
-            </a>
-            <a href="https://wa.me/5511978283472" target="_blank" style="display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; background: #eceff1; border-radius: 50%; text-decoration: none; filter: grayscale(1);">
-               <span style="font-size: 16px;">💬</span>
-            </a>
-        </div>
-        <p style="font-size: 11px; opacity: 0.6; text-transform: uppercase;">© 2026 Condomínio Turmalinas</p>
+        <p>Desenvolvido com ❤️ por <strong>Renata Rocha</strong></p>
+        <p style="font-size: 11px; opacity: 0.6; text-transform: uppercase; margin-top: 10px;">© 2026 Condomínio Turmalinas</p>
     </footer>
 
 </body>
