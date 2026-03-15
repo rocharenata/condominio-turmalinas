@@ -8,7 +8,6 @@
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; margin: 0; }
         
-        /* CENTRALIZAÇÃO E RESPONSIVIDADE */
         .container { 
             display: flex; 
             flex-direction: column; 
@@ -18,7 +17,6 @@
             margin: 0 auto;
         }
 
-        /* CABEÇALHO */
         .header-container { 
             background: linear-gradient(135deg, #22a6b3 0%, #1b8a94 100%); 
             width: 100%;
@@ -47,7 +45,6 @@
         }
         .nav-tab.active { background: white; color: #1b8a94; }
 
-        /* PAINEL PRINCIPAL */
         #app { 
             background: white; 
             padding: 30px; 
@@ -58,7 +55,6 @@
             box-sizing: border-box;
         }
         
-        /* FORMULÁRIO RESPONSIVO */
         .form-box { 
             display: grid; 
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
@@ -72,15 +68,14 @@
         input { padding: 12px; border: 1px solid #ddd; border-radius: 10px; outline: none; font-size: 14px; }
         .btn-salvar { 
             background: #22a6b3; color: white; border: none; padding: 12px; 
-            border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 15px;
+            border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 15px; transition: 0.3s;
         }
+        .btn-salvar:hover { background: #1b8a94; }
 
-        /* TABS DE TORRE */
         .tabs-torre { display: flex; gap: 5px; margin-bottom: 20px; }
         .tab-btn { flex: 1; padding: 12px; border: none; border-radius: 10px; cursor: pointer; background: #f1f5f9; font-weight: bold; color: #64748b; font-size: 13px; transition: 0.3s; }
         .tab-btn.active { background: #22a6b3; color: white; }
 
-        /* TABELA E CARDS RESPONSIVOS */
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         th { 
             background: #22a6b3; color: white; padding: 15px; 
@@ -94,14 +89,11 @@
             border-radius: 8px; font-weight: bold; display: inline-block;
         }
 
-        /* REGRAS PARA TELEMÓVEL (MOBILE) */
         @media (max-width: 600px) {
             .header-content h1 { font-size: 18px; }
             #app { padding: 20px; }
             .nav-tab { padding: 10px 12px; font-size: 12px; }
-            
-            thead { display: none; } /* Esconde o topo da tabela */
-            
+            thead { display: none; }
             tr { 
                 display: block; 
                 margin-bottom: 15px; 
@@ -111,7 +103,6 @@
                 border-radius: 15px;
                 box-shadow: 0 2px 5px rgba(0,0,0,0.02);
             }
-            
             td { 
                 display: block; 
                 text-align: right; 
@@ -120,7 +111,6 @@
                 position: relative; 
                 padding-left: 40%;
             }
-
             td::before { 
                 content: attr(data-label); 
                 position: absolute; 
@@ -130,7 +120,6 @@
                 text-transform: uppercase; 
                 font-size: 12px;
             }
-
             .badge-apto { width: 50px; }
         }
 
@@ -200,11 +189,14 @@
         }
 
         async function buscarDados() {
+            // Limpa a lista visual antes de buscar para evitar mostrar dados antigos excluídos
+            const tbody = document.getElementById('lista');
+            if(tbody) tbody.innerHTML = `<tr><td colspan="2">Buscando dados atualizados...</td></tr>`;
+
             const { data, error } = await db.from('moradores').select('*')
                 .or(`Torre.eq.Torre ${torreAtual},Torre.eq.${torreAtual}`)
                 .order('Apartamento', { ascending: true });
             
-            const tbody = document.getElementById('lista');
             if (error) { 
                 tbody.innerHTML = `<tr><td colspan='2' style='color:red'>Erro ao carregar dados.</td></tr>`; 
                 return; 
@@ -227,8 +219,14 @@
                 { Torre: "Torre " + torreAtual, Apartamento: parseInt(apto), Moradores: nome }
             ]);
 
-            if (error) alert("Erro ao salvar: " + error.message);
-            else {
+            if (error) {
+                // Erro 23505 é o código do PostgreSQL para duplicidade de chave única
+                if (error.code === '23505') {
+                    alert("Atenção: Este apartamento já está cadastrado nesta torre!");
+                } else {
+                    alert("Erro ao salvar: " + error.message);
+                }
+            } else {
                 document.getElementById('apto').value = '';
                 document.getElementById('nome').value = '';
                 buscarDados();
