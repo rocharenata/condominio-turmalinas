@@ -12,7 +12,6 @@
         .form-group { text-align: left; margin-bottom: 12px; }
         label { display: block; font-size: 12px; color: #64748b; margin-bottom: 5px; font-weight: bold; }
         input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; outline: none; box-sizing: border-box; font-size: 14px; }
-        input:focus { border-color: #22a6b3; }
         .btn-cadastrar { width: 100%; background: #22a6b3; color: white; border: none; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 16px; margin-top: 10px; transition: 0.3s; }
         .btn-cadastrar:hover { background: #1b8a94; }
         .footer-link { margin-top: 15px; font-size: 13px; color: #64748b; }
@@ -23,11 +22,11 @@
     <div class="cadastro-box">
         <div class="header-blue">
             <h2 style="margin:0;">💎 Cadastro</h2>
-            <p style="margin:5px 0 0 0; font-size: 12px;">Crie seu acesso exclusivo</p>
+            <p style="margin:5px 0 0 0; font-size: 12px;">Crie ou atualize seu acesso</p>
         </div>
         <form id="formCadastro">
             <div class="form-group">
-                <label>Nome Completo</label>
+                <label>Nome Completo (Para novos cadastros)</label>
                 <input type="text" id="nome" placeholder="Ex: Renata Rocha" required>
             </div>
             <div class="form-group">
@@ -42,9 +41,9 @@
                 <div class="form-group" style="flex: 1;">
                     <label>Torre</label>
                     <select id="torre">
-                        <option value="1">Torre 1</option>
-                        <option value="2">Torre 2</option>
-                        <option value="3">Torre 3</option>
+                        <option value="Torre 1">Torre 1</option>
+                        <option value="Torre 2">Torre 2</option>
+                        <option value="Torre 3">Torre 3</option>
                     </select>
                 </div>
                 <div class="form-group" style="flex: 1;">
@@ -59,7 +58,7 @@
             <button type="submit" class="btn-cadastrar" id="btnAcao">Finalizar Cadastro</button>
         </form>
         <div class="footer-link">
-            Já tem conta? <a href="login.html" onclick="localStorage.clear()">Faça login</a>
+            Já tem conta? <a href="index.html">Faça login</a>
         </div>
     </div>
 
@@ -68,49 +67,71 @@
         const _supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtbHVza3VveXpnbnpieHNsbHVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1MDI4MzEsImV4cCI6MjA4OTA3ODgzMX0.uGzuqE4y3_wkZNPJmNFnSSUnjDcEJaeuJjGBsT0z1UQ';
         const db = supabase.createClient(_supabaseUrl, _supabaseKey);
 
-        // Se já estiver logado, não precisa cadastrar, vai direto para o painel
-        if (localStorage.getItem('turmalinas_logado') === 'true') {
-            window.location.replace('index.html');
-        }
-
         document.getElementById('formCadastro').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btnAcao');
             
-            const nome = document.getElementById('nome').value;
+            const nomeDigitado = document.getElementById('nome').value;
             const email = document.getElementById('email').value;
-            const torre = "Torre " + document.getElementById('torre').value;
+            const telefone = document.getElementById('telefone').value;
+            const torre = document.getElementById('torre').value;
             const apto = parseInt(document.getElementById('apto').value);
             const senha = document.getElementById('senha').value;
 
-            btn.innerText = "Cadastrando...";
+            btn.innerText = "Processando...";
             btn.disabled = true;
-            
-            const payload = {
-                Moradores: nome,
-                email: email,
-                telefone: document.getElementById('telefone').value,
-                Torre: torre,
-                Apartamento: apto,
-                senha: senha 
-            };
 
-            const { error } = await db.from('moradores').insert([payload]);
+            try {
+                // 1. Verificar se o morador já existe (vindo do seu CSV)
+                const { data: existente } = await db
+                    .from('moradores')
+                    .select('*')
+                    .eq('Torre', torre)
+                    .eq('Apartamento', apto)
+                    .maybeSingle();
 
-            if (error) {
-                if (error.code === '23505') {
-                    alert("Atenção: Este e-mail ou apartamento já está cadastrado no sistema.");
+                let erroFinal = null;
+                let nomeParaSessao = nomeDigitado;
+
+                if (existente) {
+                    // 2. SE EXISTE: Atualizamos APENAS e-mail, senha e telefone. 
+                    // O nome 'Moradores' permanece o que você já tinha no banco.
+                    const { error } = await db
+                        .from('moradores')
+                        .update({ 
+                            email: email, 
+                            senha: senha, 
+                            telefone: telefone 
+                        })
+                        .eq('id', existente.id);
+                    
+                    erroFinal = error;
+                    nomeParaSessao = existente.Moradores; // Usa o nome oficial do banco para as boas-vindas
                 } else {
-                    alert("Erro ao cadastrar: " + error.message);
+                    // 3. SE NÃO EXISTE: Cria um registro novo com tudo.
+                    const { error } = await db.from('moradores').insert([{
+                        Moradores: nomeDigitado, 
+                        email: email, 
+                        telefone: telefone, 
+                        Torre: torre, 
+                        Apartamento: apto, 
+                        senha: senha
+                    }]);
+                    erroFinal = error;
                 }
+
+                if (erroFinal) throw erroFinal;
+
+                // SUCESSO: Salva sessão e redireciona
+                localStorage.setItem('turmalinas_logado', 'true');
+                localStorage.setItem('usuario_nome', nomeParaSessao);
+                alert("Cadastro finalizado com sucesso!");
+                window.location.replace('painel.html');
+
+            } catch (err) {
+                alert("Erro: " + err.message);
                 btn.innerText = "Finalizar Cadastro";
                 btn.disabled = false;
-            } else {
-                // Login automático após cadastro bem-sucedido
-                localStorage.setItem('turmalinas_logado', 'true');
-                localStorage.setItem('usuario_nome', payload.Moradores);
-                alert("Cadastro realizado com sucesso! Bem-vinda ao Turmalinas.");
-                window.location.replace('index.html'); // Usa replace para não voltar ao formulário no botão 'voltar'
             }
         });
     </script>
