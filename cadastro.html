@@ -12,6 +12,7 @@
         .form-group { text-align: left; margin-bottom: 12px; }
         label { display: block; font-size: 12px; color: #64748b; margin-bottom: 5px; font-weight: bold; }
         input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; outline: none; box-sizing: border-box; font-size: 14px; }
+        input:focus { border-color: #22a6b3; }
         .btn-cadastrar { width: 100%; background: #22a6b3; color: white; border: none; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 16px; margin-top: 10px; transition: 0.3s; }
         .btn-cadastrar:hover { background: #1b8a94; }
         .footer-link { margin-top: 15px; font-size: 13px; color: #64748b; }
@@ -26,8 +27,8 @@
         </div>
         <form id="formCadastro">
             <div class="form-group">
-                <label>Nome Completo (Para novos cadastros)</label>
-                <input type="text" id="nome" placeholder="Ex: Seu nome" required>
+                <label>Moradores (Nomes)</label>
+                <input type="text" id="nome" placeholder="Ex: Nomes de quem moram no apto" required>
             </div>
             <div class="form-group">
                 <label>E-mail (Seu Login)</label>
@@ -82,7 +83,7 @@
             btn.disabled = true;
 
             try {
-                // 1. Verificar se o morador já existe (vindo do seu CSV)
+                // 1. Verificar se o apartamento já existe
                 const { data: existente } = await db
                     .from('moradores')
                     .select('*')
@@ -91,14 +92,14 @@
                     .maybeSingle();
 
                 let erroFinal = null;
-                let nomeParaSessao = nomeDigitado;
 
                 if (existente) {
-                    // 2. SE EXISTE: Atualizamos APENAS e-mail, senha e telefone. 
-                    // O nome 'Moradores' permanece o que você já tinha no banco.
+                    // 2. SE EXISTE: Atualizamos os campos. 
+                    // Se você quiser que o nome do formulário substitua o do banco, mantemos 'Moradores: nomeDigitado'
                     const { error } = await db
                         .from('moradores')
                         .update({ 
+                            Moradores: nomeDigitado,
                             email: email, 
                             senha: senha, 
                             telefone: telefone 
@@ -106,9 +107,8 @@
                         .eq('id', existente.id);
                     
                     erroFinal = error;
-                    nomeParaSessao = existente.Moradores; // Usa o nome oficial do banco para as boas-vindas
                 } else {
-                    // 3. SE NÃO EXISTE: Cria um registro novo com tudo.
+                    // 3. SE NÃO EXISTE: Cria um registro novo.
                     const { error } = await db.from('moradores').insert([{
                         Moradores: nomeDigitado, 
                         email: email, 
@@ -122,9 +122,8 @@
 
                 if (erroFinal) throw erroFinal;
 
-                // SUCESSO: Salva sessão e redireciona
                 localStorage.setItem('turmalinas_logado', 'true');
-                localStorage.setItem('usuario_nome', nomeParaSessao);
+                localStorage.setItem('usuario_nome', nomeDigitado);
                 alert("Cadastro finalizado com sucesso!");
                 window.location.replace('painel.html');
 
