@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Turmalinas - Orçamentos</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; margin: 0; }
         .container { display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 0 10px 20px 10px; }
         
-        /* CABEÇALHO MODERNO */
+        /* CABEÇALHO IDÊNTICO AO DE MORADORES */
         .header-container { 
             background: linear-gradient(135deg, #22a6b3 0%, #1b8a94 100%); 
             width: 100%; padding: 30px 0 0 0; border-radius: 0 0 30px 30px; 
@@ -19,42 +20,43 @@
         .header-content { width: 95%; max-width: 1100px; display: flex; justify-content: space-between; align-items: center; color: white; padding-bottom: 25px; }
         .nav-tabs { width: 95%; max-width: 1100px; display: flex; gap: 10px; }
         .nav-tab { text-decoration: none; padding: 12px 20px; border-radius: 15px 15px 0 0; font-weight: bold; font-size: 14px; transition: 0.3s; background: rgba(255,255,255,0.1); color: white; }
-        .nav-tab.active { background: white; color: #1b8a94; }
+        .nav-tab.active { background: #f4f7f6; color: #1b8a94; }
 
         /* PAINEL */
-        #app { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: center; width: 100%; max-width: 1100px; box-sizing: border-box; }
+        #app { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 1100px; box-sizing: border-box; }
         
-        /* FORMULÁRIO RESPONSIVO */
+        /* FORMULÁRIO */
         .form-box { background: #f9f9f9; padding: 20px; border-radius: 15px; margin-bottom: 30px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; text-align: left; border: 1px solid #edf2f7; }
-        input { padding: 12px; border: 1px solid #ddd; border-radius: 10px; outline: none; font-size: 14px; }
+        .input-group { display: flex; flex-direction: column; }
+        .input-group label { font-size: 12px; font-weight: bold; color: #64748b; margin-bottom: 5px; }
+        input, select { padding: 12px; border: 1px solid #ddd; border-radius: 10px; outline: none; font-size: 14px; }
+        input:focus { border-color: #22a6b3; }
         .btn-salvar { grid-column: 1 / -1; background: #22a6b3; color: white; border: none; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.3s; }
+        .btn-salvar:hover { background: #1b8a94; }
 
-        /* TABELA RESPONSIVA */
+        /* TABELA E CHIPS */
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         th { background: #22a6b3; color: white; padding: 12px; text-align: left; font-size: 13px; text-transform: uppercase; }
         td { padding: 15px 12px; border-bottom: 1px solid #eee; text-align: left; font-size: 14px; color: #333; }
         
-        .btn-whatsapp { display: inline-flex; align-items: center; background-color: #25d366; color: white; text-decoration: none; padding: 7px 12px; border-radius: 20px; font-weight: bold; font-size: 12px; }
-        .insta-link { color: #e1306c; text-decoration: none; font-weight: bold; }
-        .badge-apto { background: #e0f2f1; color: #00796b; padding: 3px 8px; border-radius: 6px; font-weight: bold; }
+        .location-wrapper { display: flex; flex-direction: column; gap: 4px; }
+        .chip-torre { background: #0f172a; color: white; padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 800; width: fit-content; text-transform: uppercase; }
+        .chip-apto { background: #e0f2f1; color: #00796b; padding: 3px 8px; border-radius: 6px; font-size: 12px; font-weight: bold; width: fit-content; }
 
-        /* MEDIA QUERY PARA CELULAR */
+        /* BOTÕES SOCIAIS */
+        .social-links { display: flex; gap: 10px; }
+        .btn-contact { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 18px; transition: 0.3s; }
+        .btn-whats { background: #dcfce7; color: #25d366; }
+        .btn-whats:hover { background: #25d366; color: white; }
+        .btn-insta { background: #fce7f3; color: #e1306c; }
+        .btn-insta:hover { background: #e1306c; color: white; }
+
         @media (max-width: 768px) {
-            .header-content h1 { font-size: 18px; }
-            .nav-tab { padding: 10px 15px; font-size: 12px; }
-            
-            /* Esconde o cabeçalho da tabela no mobile */
             thead { display: none; }
-            
-            /* Transforma cada linha (tr) em um card */
-            tr { display: block; margin-bottom: 15px; border: 1px solid #eee; border-radius: 15px; padding: 15px; background: #fdfdfd; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
-            
-            td { display: block; text-align: right; border: none; padding: 8px 0; position: relative; padding-left: 50%; }
-            
-            /* Adiciona o rótulo antes do dado no mobile */
-            td::before { content: attr(data-label); position: absolute; left: 0; width: 45%; text-align: left; font-weight: bold; color: #1b8a94; font-size: 12px; text-transform: uppercase; }
-            
-            .btn-whatsapp { width: 100%; justify-content: center; box-sizing: border-box; }
+            tr { display: block; margin-bottom: 15px; border: 1px solid #eee; border-radius: 15px; padding: 15px; background: #fdfdfd; }
+            td { display: flex; justify-content: space-between; border: none; padding: 8px 0; align-items: center; }
+            td::before { content: attr(data-label); font-weight: bold; color: #1b8a94; font-size: 12px; }
+            .location-wrapper { align-items: flex-end; }
         }
 
         footer { width: 100%; margin-top: 50px; padding: 40px 20px; text-align: center; color: #64748b; font-size: 14px; background: #f8fafc; border-top: 1px solid #e2e8f0; }
@@ -80,33 +82,60 @@
         <div id="app">
             <div style="text-align: left; margin-bottom: 25px; border-left: 4px solid #22a6b3; padding-left: 15px;">
                 <h2 style="margin:0; color: #1b8a94; font-size: 18px;">Indicações de Serviços</h2>
-                <small style="color: #64748b;">Dicas dos vizinhos para sua obra ou reforma</small>
+                <p style="color: #64748b; margin: 5px 0;">Dicas dos vizinhos para sua obra ou reforma</p>
             </div>
 
             <div class="form-box">
-                <input type="text" id="morador" placeholder="Quem indica">
-                <input type="number" id="apto" placeholder="Apto">
-                <input type="text" id="servico" placeholder="Serviço">
-                <input type="text" id="empresa" placeholder="Empresa/Profissional">
-                <input type="text" id="contato" placeholder="WhatsApp">
-                <input type="text" id="rede_social" placeholder="Instagram (@)">
+                <div class="input-group">
+                    <label>Quem indica</label>
+                    <input type="text" id="morador" placeholder="Seu nome">
+                </div>
+                <div class="input-group">
+                    <label>Torre</label>
+                    <select id="torre">
+                        <option value="Torre 1">Torre 1</option>
+                        <option value="Torre 2">Torre 2</option>
+                        <option value="Torre 3">Torre 3</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Apto</label>
+                    <input type="number" id="apto" placeholder="Nº">
+                </div>
+                <div class="input-group">
+                    <label>Serviço</label>
+                    <input type="text" id="servico" placeholder="Ex: Pintura, Gesso...">
+                </div>
+                <div class="input-group">
+                    <label>Profissional / Empresa</label>
+                    <input type="text" id="empresa" placeholder="Nome do prestador">
+                </div>
+                <div class="input-group">
+                    <label>WhatsApp</label>
+                    <input type="text" id="contato" placeholder="11999999999">
+                </div>
+                <div class="input-group">
+                    <label>Instagram (@perfil)</label>
+                    <input type="text" id="rede_social" placeholder="@perfil">
+                </div>
                 <button class="btn-salvar" onclick="salvarIndicao()">Adicionar Indicação</button>
             </div>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Indicado por</th>
-                        <th>Apto</th>
-                        <th>Serviço / Empresa</th>
-                        <th>Contato</th>
-                        <th>Rede Social</th>
-                    </tr>
-                </thead>
-                <tbody id="listaOrcamentos">
-                    <tr><td colspan="5">Carregando...</td></tr>
-                </tbody>
-            </table>
+            <div class="table-container" style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Indicado por</th>
+                            <th>Localização</th>
+                            <th>Serviço / Prestador</th>
+                            <th>Contatos</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaOrcamentos">
+                        <tr><td colspan="4" style="text-align:center; padding: 20px;">Carregando...</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -116,55 +145,79 @@
         const db = supabase.createClient(_supabaseUrl, _supabaseKey);
 
         async function carregarDados() {
-            const { data, error } = await db.from('orcamentos').select('*').order('id', { ascending: false });
+            const { data, error } = await db.from('orcamentos').select('*').order('created_at', { ascending: false });
             const tbody = document.getElementById('listaOrcamentos');
             
             if (error) {
-                tbody.innerHTML = `<tr><td colspan="5">Erro ao carregar dados.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="4">Erro ao carregar dados.</td></tr>`;
                 return;
             }
 
             tbody.innerHTML = data.map(o => {
                 const foneLimpo = o.contato ? o.contato.replace(/\D/g, '') : '';
                 const linkWhats = foneLimpo ? `https://wa.me/55${foneLimpo}` : null;
-                const rede = o.rede_social ? `<a href="https://instagram.com/${o.rede_social.replace('@','')}" target="_blank" class="insta-link">📸 ${o.rede_social}</a>` : '---';
+                const linkInsta = o.rede_social ? `https://instagram.com/${o.rede_social.replace('@','')}` : null;
                 
                 return `
                 <tr>
-                    <td data-label="Indicado por">${o.morador || '---'}</td>
-                    <td data-label="Apto"><span class="badge-apto">${o.apto || '---'}</span></td>
-                    <td data-label="Serviço"><strong>${o.servico || '---'}</strong><br><small>${o.empresa || ''}</small></td>
-                    <td data-label="WhatsApp">${linkWhats ? `<a href="${linkWhats}" target="_blank" class="btn-whatsapp">🟢 WhatsApp</a>` : '---'}</td>
-                    <td data-label="Rede Social">${rede}</td>
+                    <td data-label="Indicado por">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <div style="width: 28px; height: 28px; background: #f1f5f9; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #64748b;"><i class="fas fa-user"></i></div>
+                            <strong>${o.morador || '---'}</strong>
+                        </div>
+                    </td>
+                    <td data-label="Localização">
+                        <div class="location-wrapper">
+                            <span class="chip-torre">${o.torre || 'Torre --'}</span>
+                            <span class="chip-apto">Apto ${o.apto || '---'}</span>
+                        </div>
+                    </td>
+                    <td data-label="Serviço">
+                        <span style="color:#1b8a94; font-weight:bold; display:block;">${o.servico || '---'}</span>
+                        <small style="color:#64748b;">${o.empresa || 'Profissional'}</small>
+                    </td>
+                    <td data-label="Contatos">
+                        <div class="social-links">
+                            ${linkWhats ? `<a href="${linkWhats}" target="_blank" class="btn-contact btn-whats" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>` : ''}
+                            ${linkInsta ? `<a href="${linkInsta}" target="_blank" class="btn-contact btn-insta" title="Instagram"><i class="fab fa-instagram"></i></a>` : ''}
+                        </div>
+                    </td>
                 </tr>`;
-            }).join('') || "<tr><td colspan='5'>Nenhuma indicação.</td></tr>";
+            }).join('') || "<tr><td colspan='4' style='text-align:center;'>Nenhuma indicação cadastrada.</td></tr>";
         }
 
         async function salvarIndicao() {
+            const btn = document.querySelector('.btn-salvar');
+            btn.innerText = "Publicando...";
+            btn.disabled = true;
+
             const payload = {
                 morador: document.getElementById('morador').value,
+                torre: document.getElementById('torre').value,
                 apto: document.getElementById('apto').value,
                 servico: document.getElementById('servico').value,
                 empresa: document.getElementById('empresa').value,
                 contato: document.getElementById('contato').value,
                 rede_social: document.getElementById('rede_social').value
             };
+
             const { error } = await db.from('orcamentos').insert([payload]);
             if (!error) {
+                alert("Indicação publicada com sucesso! 💎");
                 document.querySelectorAll('input').forEach(i => i.value = '');
                 carregarDados();
+            } else {
+                alert("Erro: " + error.message);
             }
+            btn.innerText = "Adicionar Indicação";
+            btn.disabled = false;
         }
         carregarDados();
     </script>
 
     <footer>
         <p>Desenvolvido com ❤️ por <strong>Renata Rocha</strong></p>
-        <div style="margin: 15px 0;">
-            <a href="mailto:renatarocha95@hotmail.com" style="text-decoration:none; color:#1b8a94; border:1px solid #1b8a94; padding:5px 15px; border-radius:20px; font-size:12px;">✉️ E-mail</a>
-            <a href="https://wa.me/5511978283472" target="_blank" style="text-decoration:none; margin-left:10px;">💬</a>
-        </div>
-        <p style="font-size: 10px; opacity: 0.6;">© 2026 CONDOMÍNIO TURMALINAS</p>
+        <p style="font-size: 10px; opacity: 0.6; margin-top: 10px;">© 2026 CONDOMÍNIO TURMALINAS</p>
     </footer>
 </body>
 </html>
