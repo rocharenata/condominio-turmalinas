@@ -5,29 +5,95 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Turmalinas - Painel</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; margin: 0; }
-        .container { display: flex; flex-direction: column; align-items: center; min-height: 80vh; padding: 0 15px 40px 15px; margin: 0 auto; }
-        .header-container { background: linear-gradient(135deg, #22a6b3 0%, #1b8a94 100%); width: 100%; padding: 30px 0 0 0; border-radius: 0 0 30px 30px; box-shadow: 0 10px 30px rgba(27, 138, 148, 0.3); margin-bottom: 30px; display: flex; flex-direction: column; align-items: center; }
+        :root {
+            --primary: #22a6b3;
+            --primary-dark: #1b8a94;
+            --bg: #f4f7f6;
+        }
+
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; display: flex; flex-direction: column; min-height: 100vh; }
+        
+        /* HEADER */
+        .header-container { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); width: 100%; padding: 30px 0 0 0; border-radius: 0 0 30px 30px; box-shadow: 0 10px 30px rgba(27, 138, 148, 0.3); margin-bottom: 20px; display: flex; flex-direction: column; align-items: center; }
         .header-content { width: 95%; max-width: 1100px; display: flex; justify-content: space-between; align-items: center; color: white; padding-bottom: 25px; }
-        .nav-tabs { width: 95%; max-width: 1100px; display: flex; gap: 8px; justify-content: space-between; align-items: flex-end; }
-        .tabs-links { display: flex; gap: 8px; }
+        .nav-tabs { width: 95%; max-width: 1100px; display: flex; gap: 8px; }
         .nav-tab { text-decoration: none; padding: 12px 20px; border-radius: 15px 15px 0 0; font-weight: bold; font-size: 14px; transition: 0.3s; background: rgba(255,255,255,0.1); color: white; }
-        .nav-tab.active { background: white; color: #1b8a94; }
-        .btn-logout { background: rgba(255, 255, 255, 0.2); color: white; border: 1px solid rgba(255,255,255,0.4); padding: 8px 15px; border-radius: 10px; cursor: pointer; font-size: 12px; transition: 0.3s; margin-bottom: 10px; }
+        .nav-tab.active { background: var(--bg); color: var(--primary-dark); }
+        .btn-logout { background: rgba(255, 255, 255, 0.2); color: white; border: 1px solid rgba(255,255,255,0.4); padding: 8px 15px; border-radius: 10px; cursor: pointer; font-size: 12px; transition: 0.3s; }
         .btn-logout:hover { background: #e74c3c; border-color: #e74c3c; }
-        #app { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 800px; box-sizing: border-box; }
-        .form-box { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 25px; background: #f9f9f9; padding: 20px; border-radius: 15px; border: 1px solid #edf2f7; }
-        input { padding: 12px; border: 1px solid #ddd; border-radius: 10px; outline: none; font-size: 14px; }
-        .btn-salvar { background: #22a6b3; color: white; border: none; padding: 12px; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 15px; transition: 0.3s; }
-        .btn-salvar:hover { background: #1b8a94; }
-        .tabs-torre { display: flex; gap: 5px; margin-bottom: 20px; }
-        .tab-btn { flex: 1; padding: 12px; border: none; border-radius: 10px; cursor: pointer; background: #f1f5f9; font-weight: bold; color: #64748b; font-size: 13px; transition: 0.3s; }
-        .tab-btn.active { background: #22a6b3; color: white; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th { background: #22a6b3; color: white; padding: 15px; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; text-align: center; border-radius: 10px 10px 0 0; }
-        td { padding: 15px; border-bottom: 1px solid #eee; text-align: center; color: #333; font-size: 15px; }
-        .badge-apto { background: #e0f2f1; color: #00796b; padding: 6px 14px; border-radius: 8px; font-weight: bold; display: inline-block; }
+
+        .container { flex: 1; width: 100%; max-width: 900px; margin: 0 auto; padding: 0 15px 40px 15px; box-sizing: border-box; }
+
+        /* BUSCA E TABS */
+        .controls { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .search-box { position: relative; margin-bottom: 15px; }
+        .search-box input { width: 100%; padding: 12px 40px 12px 15px; border: 1.5px solid #eee; border-radius: 12px; outline: none; transition: 0.3s; box-sizing: border-box; }
+        .search-box input:focus { border-color: var(--primary); }
+        .search-box i { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #94a3b8; }
+
+        .tabs-torre { display: flex; gap: 8px; }
+        .tab-btn { flex: 1; padding: 10px; border: none; border-radius: 10px; cursor: pointer; background: #f1f5f9; font-weight: bold; color: #64748b; font-size: 13px; transition: 0.3s; }
+        .tab-btn.active { background: var(--primary); color: white; box-shadow: 0 4px 10px rgba(34, 166, 179, 0.3); }
+
+        /* GRID DE MORADORES */
+        .moradores-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+            gap: 12px; 
+        }
+
+        .card-morador { 
+            background: white; 
+            padding: 15px; 
+            border-radius: 15px; 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            border: 1px solid #f0f0f0;
+            transition: 0.3s;
+        }
+        .card-morador:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.08); }
+
+        .apto-number { 
+            background: #e0f2f1; 
+            color: #00796b; 
+            font-weight: 800; 
+            min-width: 45px; 
+            height: 45px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            border-radius: 12px; 
+            font-size: 14px;
+        }
+
+        .morador-info { overflow: hidden; }
+        .morador-name { 
+            display: block; 
+            font-weight: 600; 
+            color: #334155; 
+            font-size: 14px; 
+            white-space: nowrap; 
+            text-overflow: ellipsis; 
+            overflow: hidden; 
+        }
+        .morador-label { font-size: 10px; color: #94a3b8; text-transform: uppercase; font-weight: bold; }
+
+        /* FOOTER */
+        .dev-footer { padding: 30px 20px; text-align: center; }
+        .dev-text { font-size: 12px; color: #94a3b8; margin-bottom: 10px; }
+        .dev-text b { color: var(--primary-dark); }
+        .dev-contacts { display: flex; justify-content: center; gap: 20px; }
+        .dev-contacts a { text-decoration: none; color: var(--primary-dark); font-size: 18px; transition: 0.3s; opacity: 0.6; }
+        .dev-contacts a:hover { opacity: 1; transform: translateY(-3px); }
+
+        @media (max-width: 480px) {
+            .moradores-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
@@ -36,68 +102,65 @@
         <div class="header-content">
             <div>
                 <h1 style="margin: 0; letter-spacing: 1px;">💎 TURMALINAS</h1>
-                <p id="boasVindas" style="margin: 5px 0 0 0; opacity: 0.8; font-size: 13px;">Gestão de Moradores</p>
+                <p id="boasVindas" style="margin: 5px 0 0 0; opacity: 0.8; font-size: 13px;">Carregando...</p>
             </div>
             <button class="btn-logout" onclick="sair()">Sair 🚪</button>
         </div>
         <div class="nav-tabs">
-            <div class="tabs-links">
-                <a href="painel.html" class="nav-tab active">👥 Moradores</a>
-                <a href="orcamentos.html" class="nav-tab">💰 Orçamentos</a>
-            </div>
+            <a href="painel.html" class="nav-tab active">👥 Moradores</a>
+            <a href="orcamentos.html" class="nav-tab">💰 Orçamentos</a>
         </div>
     </div>
 
     <div class="container">
-        <div id="app"></div>
+        <div class="controls">
+            <div class="search-box">
+                <input type="text" id="filtroNome" placeholder="Buscar morador..." oninput="filtrarMoradores()">
+                <i class="fas fa-search"></i>
+            </div>
+            <div class="tabs-torre">
+                <button class="tab-btn active" id="btn1" onclick="mudarTorre(1)">Torre 1</button>
+                <button class="tab-btn" id="btn2" onclick="mudarTorre(2)">Torre 2</button>
+                <button class="tab-btn" id="btn3" onclick="mudarTorre(3)">Torre 3</button>
+            </div>
+        </div>
+
+        <div id="grid-moradores" class="moradores-grid">
+            </div>
     </div>
 
-    <script>
-        // CORREÇÃO: Redireciona para index.html (que é o seu novo login)
-        if (localStorage.getItem('turmalinas_logado') !== 'true') {
-            window.location.replace('index.html');
-        }
+    <footer class="dev-footer">
+        <div class="dev-text">Desenvolvido por <b>Renata Rocha</b></div>
+        <div class="dev-contacts">
+            <a href="https://wa.me/5511978283472" target="_blank"><i class="fab fa-whatsapp"></i></a>
+            <a href="mailto:renatarocha95@hotmail.com"><i class="fas fa-envelope"></i></a>
+        </div>
+    </footer>
 
-        function sair() {
-            localStorage.clear();
+    <script>
+        const _supabaseUrl = 'https://fmluskuoyzgnzbxsllum.supabase.co';
+        const _supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtbHVza3VveXpnbnpieHNsbHVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1MDI4MzEsImV4cCI6MjA4OTA3ODgzMX0.uGzuqE4y3_wkZNPJmNFnSSUnjDcEJaeuJjGBsT0z1UQ';
+        const db = supabase.createClient(_supabaseUrl, _supabaseKey);
+
+        let torreAtual = 1;
+        let todosMoradores = [];
+
+        if (localStorage.getItem('turmalinas_logado') !== 'true') {
             window.location.replace('index.html');
         }
 
         const nomeUsuario = localStorage.getItem('usuario_nome') || "Morador";
         document.getElementById('boasVindas').innerText = `Olá, ${nomeUsuario}!`;
 
-        const _supabaseUrl = 'https://fmluskuoyzgnzbxsllum.supabase.co';
-        const _supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtbHVza3VveXpnbnpieHNsbHVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1MDI4MzEsImV4cCI6MjA4OTA3ODgzMX0.uGzuqE4y3_wkZNPJmNFnSSUnjDcEJaeuJjGBsT0z1UQ';
-        const db = supabase.createClient(_supabaseUrl, _supabaseKey);
-
-        const app = document.getElementById('app');
-        let torreAtual = 1;
-
-        function renderPainel() {
-            app.innerHTML = `
-                <div style="text-align: center; margin-bottom: 25px;">
-                    <h2 style="margin:0; color: #1b8a94; font-size: 18px;">Lista de Ocupação</h2>
-                </div>
-                <div class="tabs-torre">
-                    <button class="tab-btn ${torreAtual==1?'active':''}" onclick="mudarTorre(1)">Torre 1</button>
-                    <button class="tab-btn ${torreAtual==2?'active':''}" onclick="mudarTorre(2)">Torre 2</button>
-                    <button class="tab-btn ${torreAtual==3?'active':''}" onclick="mudarTorre(3)">Torre 3</button>
-                </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th style="width: 30%;">Apto</th>
-                            <th style="width: 70%;">Morador</th>
-                        </tr>
-                    </thead>
-                    <tbody id="lista"></tbody>
-                </table>
-            `;
-            buscarDados();
+        function sair() {
+            localStorage.clear();
+            window.location.replace('index.html');
         }
 
         async function buscarDados() {
-            const tbody = document.getElementById('lista');
+            const grid = document.getElementById('grid-moradores');
+            grid.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color:#94a3b8;">Carregando moradores...</p>`;
+
             const { data, error } = await db.from('moradores')
                 .select('*')
                 .or(`Torre.eq.Torre ${torreAtual},Torre.eq.${torreAtual}`)
@@ -105,16 +168,47 @@
             
             if (error) return;
             
-            tbody.innerHTML = data.map(m => `
-                <tr>
-                    <td><span class="badge-apto">${m.Apartamento}</span></td>
-                    <td>${m.Moradores}</td>
-                </tr>
-            `).join('') || "<tr><td colspan='2'>Ninguém cadastrado.</td></tr>";
+            todosMoradores = data;
+            renderizarCards(data);
         }
 
-        function mudarTorre(n) { torreAtual = n; renderPainel(); }
-        renderPainel();
+        function renderizarCards(lista) {
+            const grid = document.getElementById('grid-moradores');
+            if (lista.length === 0) {
+                grid.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color:#94a3b8;">Nenhum morador encontrado.</p>`;
+                return;
+            }
+
+            grid.innerHTML = lista.map(m => `
+                <div class="card-morador">
+                    <div class="apto-number">${m.Apartamento}</div>
+                    <div class="morador-info">
+                        <div class="morador-label">Morador</div>
+                        <span class="morador-name" title="${m.Moradores}">${m.Moradores}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filtrarMoradores() {
+            const termo = document.getElementById('filtroNome').value.toLowerCase();
+            const filtrados = todosMoradores.filter(m => 
+                m.Moradores.toLowerCase().includes(termo) || 
+                m.Apartamento.toString().includes(termo)
+            );
+            renderizarCards(filtrados);
+        }
+
+        function mudarTorre(n) {
+            torreAtual = n;
+            // Atualiza botões
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`btn${n}`).classList.add('active');
+            document.getElementById('filtroNome').value = ''; // Limpa busca ao trocar torre
+            buscarDados();
+        }
+
+        buscarDados();
     </script>
 </body>
 </html>

@@ -5,21 +5,142 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Turmalinas</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .login-box { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 350px; text-align: center; }
-        .header-blue { background: linear-gradient(135deg, #22a6b3 0%, #1b8a94 100%); color: white; padding: 20px; border-radius: 15px; margin-bottom: 25px; }
-        input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 10px; outline: none; box-sizing: border-box; }
-        .btn-login { width: 100%; background: #22a6b3; color: white; border: none; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.3s; }
-        .btn-login:hover { background: #1b8a94; }
-        .footer-links { margin-top: 20px; font-size: 13px; color: #64748b; }
-        .footer-links a { color: #22a6b3; text-decoration: none; font-weight: bold; }
+        :root {
+            --primary: #22a6b3;
+            --primary-dark: #1b8a94;
+            --bg: #f4f7f6;
+            --text-muted: #94a3b8;
+        }
+
+        body { 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+            background: var(--bg); 
+            margin: 0; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            overflow: hidden; 
+        }
+
+        .login-box { 
+            background: white; 
+            padding: 40px; 
+            border-radius: 24px; 
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04); 
+            width: 90%; 
+            max-width: 380px; 
+            text-align: center; 
+            z-index: 2;
+            border: 1px solid rgba(255,255,255,0.18);
+        }
+
+        .header-blue { 
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); 
+            color: white; 
+            padding: 25px; 
+            border-radius: 18px; 
+            margin-bottom: 30px; 
+        }
+
+        input { 
+            width: 100%; 
+            padding: 14px; 
+            margin-bottom: 15px; 
+            border: 1.5px solid #e2e8f0; 
+            border-radius: 12px; 
+            outline: none; 
+            box-sizing: border-box; 
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(34, 166, 179, 0.1);
+            background: white;
+        }
+
+        .btn-login { 
+            width: 100%; 
+            background: var(--primary); 
+            color: white; 
+            border: none; 
+            padding: 16px; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            font-size: 16px; 
+            transition: 0.3s; 
+            margin-top: 5px;
+        }
+
+        .btn-login:hover { 
+            background: var(--primary-dark); 
+            transform: translateY(-1px);
+            box-shadow: 0 10px 15px -3px rgba(34, 166, 179, 0.3);
+        }
+
+        .footer-links { margin-top: 25px; font-size: 13px; color: #64748b; }
+        .footer-links a { color: var(--primary); text-decoration: none; font-weight: bold; }
+
+        /* FOOTER DA DESENVOLVEDORA */
+        .dev-footer {
+            position: fixed;
+            bottom: 30px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            z-index: 10;
+        }
+
+        .dev-text {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .dev-text b {
+            color: var(--primary-dark);
+            font-weight: 700;
+        }
+
+        .dev-contacts {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .dev-contacts a {
+            text-decoration: none;
+            color: var(--primary-dark);
+            font-size: 18px;
+            transition: 0.3s;
+            opacity: 0.7;
+        }
+
+        .dev-contacts a:hover {
+            opacity: 1;
+            transform: translateY(-3px);
+            color: var(--primary);
+        }
+
+        /* Ajuste para telas pequenas (teclado mobile) */
+        @media (max-height: 600px) {
+            body { height: auto; padding: 40px 0; overflow: y-auto; }
+            .dev-footer { position: static; margin-top: 30px; }
+        }
     </style>
 </head>
 <body>
+
     <div class="login-box">
         <div class="header-blue">
-            <h2 style="margin:0;">💎 Login</h2>
+            <h2 style="margin:0; letter-spacing: 1px;">💎 Login</h2>
             <p style="margin:5px 0 0 0; font-size: 12px; opacity: 0.9;">Condomínio Turmalinas</p>
         </div>
         
@@ -33,12 +154,24 @@
         </div>
     </div>
 
+    <footer class="dev-footer">
+        <div class="dev-text">Desenvolvido por <b>Renata Rocha</b></div>
+        <div class="dev-contacts">
+            <a href="https://wa.me/5511978283472" target="_blank" title="WhatsApp">
+                <i class="fab fa-whatsapp"></i>
+            </a>
+            <a href="mailto:renatarocha95@hotmail.com" title="E-mail">
+                <i class="fas fa-envelope"></i>
+            </a>
+        </div>
+    </footer>
+
     <script>
         const _supabaseUrl = 'https://fmluskuoyzgnzbxsllum.supabase.co';
         const _supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtbHVza3VveXpnbnpieHNsbHVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1MDI4MzEsImV4cCI6MjA4OTA3ODgzMX0.uGzuqE4y3_wkZNPJmNFnSSUnjDcEJaeuJjGBsT0z1UQ';
         const db = supabase.createClient(_supabaseUrl, _supabaseKey);
 
-        // LOGICA INICIAL: Se já estiver logado, vai direto para o painel
+        // Redireciona se já estiver logado
         if (localStorage.getItem('turmalinas_logado') === 'true') {
             window.location.replace('painel.html');
         }
@@ -80,7 +213,11 @@
                 btn.disabled = false;
             }
         }
-        document.addEventListener('keypress', (e) => { if (e.key === 'Enter') fazerLogin(); });
+
+        // Permitir login ao apertar Enter
+        document.addEventListener('keypress', (e) => { 
+            if (e.key === 'Enter') fazerLogin(); 
+        });
     </script>
 </body>
 </html>
