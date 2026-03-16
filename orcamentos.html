@@ -39,11 +39,6 @@
         th { background: #22a6b3; color: white; padding: 12px; text-align: left; font-size: 13px; text-transform: uppercase; }
         td { padding: 15px 12px; border-bottom: 1px solid #eee; text-align: left; font-size: 14px; color: #333; }
         
-        /* LOCALIZAÇÃO */
-        .location-wrapper { display: flex; flex-direction: column; gap: 4px; }
-        .chip-torre { background: #0f172a; color: white; padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 800; width: fit-content; text-transform: uppercase; }
-        .chip-apto { background: #e0f2f1; color: #00796b; padding: 3px 8px; border-radius: 6px; font-size: 12px; font-weight: bold; width: fit-content; }
-
         /* CONTATOS TABELA */
         .social-links { display: flex; gap: 8px; }
         .btn-contact { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 18px; transition: 0.3s; border: none; cursor: pointer; }
@@ -59,23 +54,15 @@
             td { display: flex; justify-content: space-between; border: none; padding: 10px 0; align-items: center; }
             td[data-label="Serviço"] { display: block; background: #f8fafc; margin: 10px -15px; padding: 15px; border-top: 1px solid #eee; border-bottom: 1px solid #eee; }
             td::before { content: attr(data-label); font-weight: bold; color: #1b8a94; font-size: 11px; text-transform: uppercase; }
-            .location-wrapper { align-items: flex-end; }
         }
 
-        /* ESTILO DO FOOTER PERSONALIZADO */
         .dev-footer {
-            background: #f8fafc;
-            padding: 40px 20px;
-            text-align: center;
-            width: 100%;
-            margin-top: 50px;
-            border-top: 1px solid #edf2f7;
+            background: #f8fafc; padding: 40px 20px; text-align: center; width: 100%; margin-top: 50px; border-top: 1px solid #edf2f7;
         }
-        .dev-text { font-size: 12px; color: #94a3b8; margin-bottom: 10px; letter-spacing: 0.5px; }
-        .dev-text b { color: #1b8a94; font-weight: 700; }
+        .dev-text { font-size: 12px; color: #94a3b8; margin-bottom: 10px; }
+        .dev-text b { color: #1b8a94; }
         .dev-contacts { display: flex; justify-content: center; gap: 20px; }
-        .dev-contacts a { text-decoration: none; color: #1b8a94; font-size: 18px; transition: 0.3s; opacity: 0.7; }
-        .dev-contacts a:hover { opacity: 1; transform: translateY(-3px); color: #22a6b3; }
+        .dev-contacts a { text-decoration: none; color: #1b8a94; font-size: 18px; }
     </style>
 </head>
 <body>
@@ -96,11 +83,6 @@
 
     <div class="container">
         <div id="app">
-            <div style="text-align: left; margin-bottom: 25px; border-left: 4px solid #22a6b3; padding-left: 15px;">
-                <h2 style="margin:0; color: #1b8a94; font-size: 18px;">Indicações de Serviços</h2>
-                <p style="color: #64748b; margin: 5px 0;">Dicas dos vizinhos para sua obra ou reforma</p>
-            </div>
-
             <div class="form-box">
                 <div class="input-group"><label>Quem indica</label><input type="text" id="morador" placeholder="Seu nome"></div>
                 <div class="input-group">
@@ -124,13 +106,12 @@
                     <thead>
                         <tr>
                             <th>Indicado por</th>
-                            <th>Localização</th>
                             <th>Serviço / Prestador</th>
                             <th>Contatos</th>
                         </tr>
                     </thead>
                     <tbody id="listaOrcamentos">
-                        <tr><td colspan="4" style="text-align:center; padding: 20px;">Carregando...</td></tr>
+                        <tr><td colspan="3" style="text-align:center; padding: 20px;">Carregando...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -140,8 +121,8 @@
     <footer class="dev-footer">
         <div class="dev-text">Desenvolvido por <b>Renata Rocha</b></div>
         <div class="dev-contacts">
-            <a href="https://wa.me/5511978283472" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-            <a href="mailto:renatarocha95@hotmail.com" title="E-mail"><i class="fas fa-envelope"></i></a>
+            <a href="https://wa.me/5511978283472" target="_blank"><i class="fab fa-whatsapp"></i></a>
+            <a href="mailto:renatarocha95@hotmail.com"><i class="fas fa-envelope"></i></a>
         </div>
     </footer>
 
@@ -153,74 +134,56 @@
         async function carregarDados() {
             const { data, error } = await db.from('orcamentos').select('*').order('created_at', { ascending: false });
             const tbody = document.getElementById('listaOrcamentos');
-            if (error) { tbody.innerHTML = `<tr><td colspan="4">Erro ao carregar dados.</td></tr>`; return; }
+            if (error) { tbody.innerHTML = `<tr><td colspan="3">Erro ao carregar dados.</td></tr>`; return; }
 
             tbody.innerHTML = data.map(o => {
                 const foneLimpo = o.contato ? o.contato.replace(/\D/g, '') : '';
                 const linkWhats = foneLimpo ? `https://wa.me/55${foneLimpo}` : null;
                 const linkInsta = o.rede_social ? `https://instagram.com/${o.rede_social.replace('@','')}` : null;
                 
-                // Preparar dados para o compartilhamento
-                const dadosParaCompartilhar = JSON.stringify({
-                    servico: o.servico,
-                    empresa: o.empresa,
-                    contato: o.contato
-                }).replace(/"/g, '&quot;');
+                // Preparação dos dados para evitar erros de aspas e undefined
+                const serv = (o.servico || 'Não informado').replace(/'/g, "\\'");
+                const empr = (o.empresa || '').replace(/'/g, "\\'");
+                const cont = (o.contato || 'Não informado').replace(/'/g, "\\'");
 
                 return `
                 <tr>
                     <td data-label="Indicado por">
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <div style="width: 28px; height: 28px; background: #f1f5f9; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #64748b;"><i class="fas fa-user"></i></div>
-                            <strong>${o.morador || '---'}</strong>
-                        </div>
-                    </td>
-                    <td data-label="Localização">
-                        <div class="location-wrapper">
-                            <span class="chip-torre">${o.torre || 'Torre --'}</span>
-                            <span class="chip-apto">Apto ${o.apto || '---'}</span>
-                        </div>
+                        <strong>${o.morador || '---'}</strong><br>
+                        <small>${o.torre || ''} - Ap ${o.apto || ''}</small>
                     </td>
                     <td data-label="Serviço">
-                        <div class="service-content-mobile">
-                            <span style="color:#1b8a94; font-weight:800; font-size:16px; display:block; line-height:1.2;">${o.servico || '---'}</span>
-                            <small style="color:#64748b; font-weight:600;"><i class="fas fa-tools" style="font-size:10px; opacity:0.5;"></i> ${o.empresa || 'Profissional'}</small>
-                        </div>
+                        <span style="color:#1b8a94; font-weight:800;">${o.servico || '---'}</span><br>
+                        <small>${o.empresa || ''}</small>
                     </td>
                     <td data-label="Contatos">
                         <div class="social-links">
-                            ${linkWhats ? `<a href="${linkWhats}" target="_blank" class="btn-contact btn-whats" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>` : ''}
-                            ${linkInsta ? `<a href="${linkInsta}" target="_blank" class="btn-contact btn-insta" title="Instagram"><i class="fab fa-instagram"></i></a>` : ''}
-                            <button onclick="compartilharIndicacao('${o.servico}', '${o.empresa}', '${o.contato}')" class="btn-contact btn-share" title="Compartilhar">
+                            ${linkWhats ? `<a href="${linkWhats}" target="_blank" class="btn-contact btn-whats"><i class="fab fa-whatsapp"></i></a>` : ''}
+                            ${linkInsta ? `<a href="${linkInsta}" target="_blank" class="btn-contact btn-insta"><i class="fab fa-instagram"></i></a>` : ''}
+                            <button onclick="compartilhar('${serv}', '${empr}', '${cont}')" class="btn-contact btn-share">
                                 <i class="fas fa-share-nodes"></i>
                             </button>
                         </div>
                     </td>
                 </tr>`;
-            }).join('') || "<tr><td colspan='4' style='text-align:center;'>Nenhuma indicação cadastrada.</td></tr>";
+            }).join('');
         }
 
-        // FUNÇÃO DE COMPARTILHAMENTO
-        function compartilharIndicacao(servico, empresa, contato) {
-            const texto = `💎 *Indicação Turmalinas*\n\n🛠 *Serviço:* ${servico}\n👤 *Profissional:* ${empresa}\n📞 *Contato:* ${contato}\n\n_Dica enviada através do nosso Painel Administrativo!_`;
+        function compartilhar(servico, empresa, contato) {
+            let msg = `💎 *Indicação Turmalinas*\n\n🛠 *Serviço:* ${servico}`;
+            if (empresa && empresa !== '---' && empresa !== '') {
+                msg += `\n👤 *Profissional:* ${empresa}`;
+            }
+            msg += `\n📞 *Contato:* ${contato}\n\n_Enviado pelo Painel Turmalinas!_`;
 
             if (navigator.share) {
-                navigator.share({
-                    title: 'Indicação de Serviço - Turmalinas',
-                    text: texto,
-                    url: window.location.href
-                }).catch(console.error);
+                navigator.share({ title: 'Indicação', text: msg }).catch(console.error);
             } else {
-                // Fallback para quem não tem a API de compartilhamento (ex: browsers antigos)
-                const urlWhats = `https://wa.me/?text=${encodeURIComponent(texto)}`;
-                window.open(urlWhats, '_blank');
+                window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
             }
         }
 
         async function salvarIndicao() {
-            const btn = document.querySelector('.btn-salvar');
-            btn.innerText = "Publicando...";
-            btn.disabled = true;
             const payload = {
                 morador: document.getElementById('morador').value,
                 torre: document.getElementById('torre').value,
@@ -232,11 +195,9 @@
             };
             const { error } = await db.from('orcamentos').insert([payload]);
             if (!error) {
-                alert("Indicação publicada com sucesso! 💎");
-                document.querySelectorAll('input').forEach(i => i.value = '');
-                carregarDados();
+                alert("Publicado com sucesso!");
+                location.reload();
             } else { alert("Erro: " + error.message); }
-            btn.innerText = "Adicionar Indicação"; btn.disabled = false;
         }
         carregarDados();
     </script>
