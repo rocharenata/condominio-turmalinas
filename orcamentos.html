@@ -26,67 +26,61 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); margin: 0; color: var(--text-main); display: flex; flex-direction: column; min-height: 100vh; }
         
         /* HEADER */
-        .header-container { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); width: 100%; padding: 30px 0 0 0; border-radius: 0 0 40px 40px; box-shadow: 0 10px 25px rgba(27, 138, 148, 0.2); margin-bottom: 30px; display: flex; flex-direction: column; align-items: center; }
-        .header-content { width: 92%; max-width: 1100px; display: flex; justify-content: space-between; align-items: center; color: white; padding-bottom: 25px; }
-        .header-content h1 { font-size: 24px; font-weight: 800; margin: 0; }
+        .header-container { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); width: 100%; padding: 25px 0 0 0; border-radius: 0 0 35px 35px; box-shadow: 0 10px 25px rgba(27, 138, 148, 0.2); margin-bottom: 25px; display: flex; flex-direction: column; align-items: center; }
+        .header-content { width: 92%; max-width: 1100px; display: flex; justify-content: space-between; align-items: center; color: white; padding-bottom: 20px; }
+        .header-content h1 { font-size: 22px; font-weight: 800; margin: 0; }
         
-        .nav-tabs { width: 92%; max-width: 1100px; display: flex; gap: 10px; }
-        .nav-tab { text-decoration: none; padding: 14px 24px; border-radius: 16px 16px 0 0; font-weight: 700; font-size: 14px; background: rgba(255,255,255,0.1); color: white; transition: 0.3s; }
+        .nav-tabs { width: 92%; max-width: 1100px; display: flex; gap: 8px; }
+        .nav-tab { text-decoration: none; padding: 12px 18px; border-radius: 14px 14px 0 0; font-weight: 700; font-size: 13px; background: rgba(255,255,255,0.1); color: white; transition: 0.3s; }
         .nav-tab.active { background: var(--bg); color: var(--primary-dark); }
-        .btn-logout { background: rgba(255, 255, 255, 0.15); color: white; border: none; padding: 10px 18px; border-radius: 12px; cursor: pointer; font-weight: 600; }
+        .btn-logout { background: rgba(255, 255, 255, 0.15); color: white; border: none; padding: 8px 14px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 12px; }
 
-        .container { flex: 1; width: 100%; max-width: 1100px; margin: 0 auto; padding: 0 20px 50px 20px; box-sizing: border-box; }
+        .container { flex: 1; width: 100%; max-width: 1100px; margin: 0 auto; padding: 0 15px 40px 15px; box-sizing: border-box; }
 
         /* BUSCA */
-        .search-box { position: relative; margin-bottom: 25px; }
-        .search-box input { width: 100%; padding: 18px 25px 18px 55px; border-radius: 18px; border: 2px solid white; background: white; box-shadow: var(--shadow); outline: none; font-size: 16px; transition: 0.3s; box-sizing: border-box; }
-        .search-box i { position: absolute; left: 22px; top: 50%; transform: translateY(-50%); color: var(--primary); font-size: 18px; }
+        .search-box { position: relative; margin-bottom: 20px; }
+        .search-box input { width: 100%; padding: 15px 20px 15px 50px; border-radius: 16px; border: 2px solid white; background: white; box-shadow: var(--shadow); outline: none; font-size: 15px; transition: 0.3s; box-sizing: border-box; }
+        .search-box i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--primary); font-size: 17px; }
 
         /* FORMULÁRIO */
-        .form-section { background: var(--white); padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 30px; border: 1px solid rgba(255,255,255,0.8); }
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
-        .input-group { display: flex; flex-direction: column; gap: 8px; }
+        .form-section { background: var(--white); padding: 20px; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.8); }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+        .input-group { display: flex; flex-direction: column; gap: 6px; }
         .input-group label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
-        .input-group input, .input-group select { padding: 12px; border: 2px solid #f1f5f9; border-radius: 12px; outline: none; transition: 0.3s; font-size: 14px; }
+        .input-group input, .input-group select { padding: 11px; border: 2px solid #f1f5f9; border-radius: 10px; outline: none; font-size: 14px; }
         
-        .btn-add { grid-column: 1 / -1; background: var(--primary); color: white; border: none; padding: 16px; border-radius: 16px; font-weight: 800; cursor: pointer; transition: 0.3s; margin-top: 10px; }
-        .btn-add:hover { background: var(--primary-dark); transform: translateY(-2px); }
+        .btn-add { grid-column: 1 / -1; background: var(--primary); color: white; border: none; padding: 14px; border-radius: 14px; font-weight: 800; cursor: pointer; transition: 0.3s; margin-top: 5px; font-size: 14px; }
 
-        /* TABELA */
+        /* TABELA RESPONSIVA */
         .table-container { background: var(--white); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
         table { width: 100%; border-collapse: collapse; }
-        th { background: #f8fafc; color: var(--text-muted); text-align: left; padding: 18px; font-size: 11px; text-transform: uppercase; font-weight: 800; border-bottom: 2px solid #f1f5f9; }
-        td { padding: 20px 18px; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
+        th { background: #f8fafc; color: var(--text-muted); text-align: left; padding: 15px; font-size: 11px; text-transform: uppercase; font-weight: 800; border-bottom: 2px solid #f1f5f9; }
+        td { padding: 15px; border-bottom: 1px solid #f1f5f9; font-size: 14px; vertical-align: middle; }
         
-        /* AJUSTE DE CORES: NOME E LOCALIZAÇÃO */
-        .morador-wrapper { display: flex; flex-direction: column; gap: 6px; }
-        .morador-nome { font-weight: 700; color: #2c3e50; font-size: 15px; }
-        .morador-badge { 
-            display: inline-flex; align-items: center; gap: 6px; 
-            background: var(--primary-light); color: var(--primary-dark); 
-            padding: 4px 12px; border-radius: 10px; font-size: 11px; font-weight: 700; 
-            width: fit-content;
-        }
-        .morador-badge i { color: var(--primary); font-size: 12px; }
+        .morador-wrapper { display: flex; flex-direction: column; gap: 4px; }
+        .morador-nome { font-weight: 700; color: #2c3e50; font-size: 14px; }
+        .morador-badge { display: inline-flex; align-items: center; gap: 5px; background: var(--primary-light); color: var(--primary-dark); padding: 3px 10px; border-radius: 8px; font-size: 10px; font-weight: 700; width: fit-content; }
         
-        .servico-destaque { font-weight: 700; color: var(--primary-dark); font-size: 16px; }
+        .servico-destaque { font-weight: 700; color: var(--primary-dark); font-size: 15px; }
 
-        /* BOTÕES DE CONTATO */
-        .contact-icons { display: flex; gap: 10px; }
-        .contact-icons a, .contact-icons button { 
-            width: 42px; height: 42px; border-radius: 14px; 
-            display: flex; align-items: center; justify-content: center; 
-            text-decoration: none; font-size: 18px; transition: 0.3s;
-            border: none; cursor: pointer;
-        }
+        .contact-icons { display: flex; gap: 8px; }
+        .contact-icons a, .contact-icons button { width: 38px; height: 38px; border-radius: 11px; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 17px; transition: 0.3s; border: none; cursor: pointer; }
         
         .btn-whats { background-color: #e8fbf1; color: var(--success); }
         .btn-insta { background-color: #fce8f0; color: var(--insta); }
         .btn-share { background-color: #eaf6fe; color: #3498db; }
-        .contact-icons *:hover { transform: translateY(-3px); filter: brightness(0.95); }
 
-        @media (max-width: 768px) {
-            th:nth-child(1), td:nth-child(1) { display: table-cell; } /* Mantido para garantir visibilidade */
+        /* REGRAS PARA CELULAR (MOBILE) */
+        @media (max-width: 600px) {
+            table, thead, tbody, th, td, tr { display: block; }
+            thead tr { position: absolute; top: -9999px; left: -9999px; }
+            tr { margin-bottom: 15px; border: 1px solid #eee; border-radius: 18px; padding: 10px; background: white; }
+            td { border: none; position: relative; padding: 8px 10px; }
+            
+            .morador-wrapper { flex-direction: row; align-items: center; justify-content: space-between; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px; margin-bottom: 5px; }
+            .servico-destaque { font-size: 17px; display: block; margin: 5px 0; }
+            .contact-icons { justify-content: flex-end; margin-top: 10px; gap: 12px; }
+            .contact-icons a, .contact-icons button { width: 45px; height: 45px; font-size: 20px; }
         }
     </style>
 </head>
@@ -96,7 +90,7 @@
         <div class="header-content">
             <div>
                 <h1>💎 TURMALINAS</h1>
-                <p id="boasVindas">Olá!</p>
+                <p id="boasVindas" style="margin: 3px 0 0 0; opacity: 0.8; font-size: 12px;">Olá!</p>
             </div>
             <button class="btn-logout" onclick="sair()">Sair 🚪</button>
         </div>
@@ -110,7 +104,7 @@
         
         <div class="search-box">
             <i class="fas fa-search"></i>
-            <input type="text" id="inputBusca" placeholder="Pesquisar serviço, profissional ou morador..." onkeyup="filtrarTabela()">
+            <input type="text" id="inputBusca" placeholder="Pesquisar serviço ou morador..." onkeyup="filtrarTabela()">
         </div>
 
         <div class="form-section">
@@ -125,9 +119,9 @@
                     </select>
                 </div>
                 <div class="input-group"><label>Seu Apto</label><input type="number" id="apto" placeholder="Ex: 101"></div>
-                <div class="input-group"><label>Serviço / Profissional</label><input type="text" id="servico" placeholder="Ex: Pintura - Nome do Prestador"></div>
-                <div class="input-group"><label>WhatsApp Profissional</label><input type="text" id="contato" placeholder="Apenas números"></div>
-                <div class="input-group"><label>Instagram Profissional</label><input type="text" id="rede_social" placeholder="Link ou @perfil"></div>
+                <div class="input-group"><label>Serviço / Profissional</label><input type="text" id="servico" placeholder="Pintura - Nome"></div>
+                <div class="input-group"><label>WhatsApp</label><input type="text" id="contato" placeholder="Apenas números"></div>
+                <div class="input-group"><label>Instagram</label><input type="text" id="rede_social" placeholder="@perfil"></div>
                 <button class="btn-add" onclick="adicionarIndicacao()">Adicionar Indicação</button>
             </div>
         </div>
@@ -214,7 +208,7 @@
                 catch (err) { console.log('Cancelado'); }
             } else {
                 navigator.clipboard.writeText(texto);
-                alert('Informações copiadas!');
+                alert('Copiado para colar no WhatsApp!');
             }
         }
 
@@ -227,7 +221,7 @@
                 contato: document.getElementById('contato').value,
                 rede_social: document.getElementById('rede_social').value
             };
-            if(!dados.morador || !dados.servico) return alert("Preencha seu nome e o serviço.");
+            if(!dados.morador || !dados.servico) return alert("Preencha nome e serviço.");
             const { error } = await db.from('orcamentos').insert([dados]);
             if (!error) {
                 alert("Indicação adicionada!");
