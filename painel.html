@@ -181,9 +181,11 @@
         let torreAtual = 1;
         let todosMoradores = [];
 
+        
         if (localStorage.getItem('turmalinas_logado') !== 'true') {
             window.location.replace('index.html');
         }
+        
 
         document.getElementById('boasVindas').innerText = `Olá, ${localStorage.getItem('usuario_nome') || "Morador"}!`;
 
@@ -222,16 +224,65 @@
         }
 
         function renderizarCards(lista) {
+
             const grid = document.getElementById('grid-moradores');
-            grid.innerHTML = lista.length === 0 ? `<p style="grid-column: 1/-1; text-align:center; color:#94a3b8;">Nenhum morador encontrado.</p>` : 
+
+            grid.innerHTML = lista.length === 0
+
+            ? `
+                <p style="
+                    grid-column: 1/-1;
+                    text-align:center;
+                    color:#94a3b8;
+                ">
+                    Nenhum morador encontrado.
+                </p>
+            `
+
+            :
+
             lista.map(m => `
+
                 <div class="card-morador">
-                    <div class="apto-number">${m.Apartamento}</div>
-                    <div class="morador-info">
-                        <div class="morador-label">Morador</div>
-                        <span class="morador-name">${m.Moradores}</span>
+
+                    <div class="apto-number">
+                        ${m.Apartamento}
                     </div>
+
+                    <div class="morador-info">
+
+                        <div class="morador-label">
+                            Morador
+                        </div>
+
+                        <span class="morador-name">
+                            ${m.Moradores}
+                        </span>
+
+                        ${localStorage.getItem('apartamento') == m.Apartamento
+                        ? `
+                            <button
+                                onclick="editarMorador(${m.id})"
+                                style="
+                                    margin-top:8px;
+                                    border:none;
+                                    background:#22a6b3;
+                                    color:white;
+                                    padding:6px 10px;
+                                    border-radius:8px;
+                                    cursor:pointer;
+                                    font-size:12px;
+                                "
+                            >
+                                ✏️ Editar
+                            </button>
+                        `
+                        : ''}
+
+                    </div>
+
                 </div>
+
             `).join('');
         }
 
@@ -249,6 +300,38 @@
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById(`btn${n}`).classList.add('active');
             document.getElementById('bar-fill').style.width = `0%`;
+            buscarDados();
+        }
+
+        async function editarMorador(id) {
+
+            const novoNome = prompt(
+                "Digite o novo nome:"
+            );
+
+            if (!novoNome) return;
+
+            const { error } = await db
+
+                .from('moradores')
+
+                .update({
+                    Moradores: novoNome
+                })
+
+                .eq('id', id);
+
+            if (error) {
+
+                console.log(error);
+
+                alert("Erro ao atualizar");
+
+                return;
+            }
+
+            alert("Nome atualizado!");
+
             buscarDados();
         }
 
