@@ -181,11 +181,11 @@
         let torreAtual = 1;
         let todosMoradores = [];
 
-        
+        /*
         if (localStorage.getItem('turmalinas_logado') !== 'true') {
             window.location.replace('index.html');
         }
-        
+        */
 
         document.getElementById('boasVindas').innerText = `Olá, ${localStorage.getItem('usuario_nome') || "Morador"}!`;
 
@@ -259,7 +259,7 @@
                             ${m.Moradores}
                         </span>
 
-                        ${localStorage.getItem('apartamento') == m.Apartamento
+                        ${localStorage.getItem('apartamento') == String(m.Apartamento)
                         ? `
                             <button
                                 onclick="editarMorador(${m.id})"
