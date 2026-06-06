@@ -202,6 +202,7 @@
                 } else if (senhaInput === data.senha) {
                     localStorage.setItem('turmalinas_logado', 'true');
                     localStorage.setItem('usuario_nome', data.Moradores);
+                    localStorage.setItem( 'apartamento', String(data.Apartamento));
                     window.location.replace('painel.html'); 
                 } else {
                     alert("Senha incorreta!");
